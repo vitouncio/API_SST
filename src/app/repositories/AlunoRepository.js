@@ -4,9 +4,10 @@ class AlunoRepository {
   //CRUD
 
   create(aluno) {
-    const sql = "INSERT INTO tbl_aluno SET ?;";
-    return consulta(sql,aluno, "Não foi possível cadastrar o novo aluno")
+    const sql = "INSERT INTO tbl_aluno SET ?";
+    return consulta(sql, aluno, "Não foi possível cadastrar o novo aluno")
   }
+
 
   findAll() {
     const sql = "SELECT * FROM tbl_aluno;";

@@ -1,4 +1,5 @@
 import mysql from 'mysql'
+import bodyParser from "body-parser";
 
 const conexao = mysql.createConnection({
     host: 'localhost',

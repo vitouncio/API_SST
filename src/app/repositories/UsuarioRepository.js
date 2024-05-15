@@ -21,6 +21,13 @@ class UsuarioRepository {
 
   }
 
+  findByEmail(email) {
+
+    const sql = "SELECT * FROM tbl_usuario WHERE email=?;";
+    return consulta(sql,id, `Não conseguimos encontrar este usuário.`)
+
+  }
+
   update(usuario, id) {
     const sql = "UPDATE tbl_usuario SET ? WHERE id_usuario=?;";
     return consulta(sql, [usuario, id], `Não foi possível atualizar o usuário de id: ${id}`)

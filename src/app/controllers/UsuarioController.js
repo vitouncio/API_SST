@@ -10,13 +10,19 @@ class UsuarioController {
     const id = req.params.id;
     const result = await UsuarioRepository.findById(id);
     res.json(result)
+  
+  }
+  
+  async showEmail(req, res) {
+    const id = req.params.id;
+    const result = await UsuarioRepository.findById(id);
+    res.json(result)
   }
 
   async store(req, res) {
-    /*listaClientes.push(req.body); //req.body = conteúdo do corpo da requisição
-        res.status(201).send("Cliente cadastrado!");*/
-
     const usuario = req.body;
+    console.log(usuario.senha)
+    usuario.senha = criptografar(usuario.senha)
     const result = await UsuarioRepository.create(usuario)
     res.json(result)
   }

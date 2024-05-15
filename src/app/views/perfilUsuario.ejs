@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .profile-container {
+            background-color: #1f1f1f;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .profile-container h1 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .profile-info {
+            margin: 20px 0;
+        }
+        .profile-info p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        .profile-info .label {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Perfil de usuário</h1>
+        <div class="profile-info">
+            <p><span class="label">Nome:</span> <%= usuarioLogado.nome %></p>
+            <p><span class="label">Email:</span> <%= usuarioLogado.nome %></p>
+            <p><span class="label">ID:</span> <%= usuarioLogado.nome %></p>
+        </div>
+        <a href="#" class="btn">Editar Perfil</a>
+        <a href="#" class="btn">Desconectar</a>
+    </div>
+</body>
+</html>
