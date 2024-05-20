@@ -21,14 +21,12 @@ class UsuarioController {
 
   async store(req, res) {
     const usuario = req.body;
-    console.log(usuario.senha)
-    usuario.senha = criptografar(usuario.senha)
     const result = await UsuarioRepository.create(usuario)
     res.json(result)
   }
 
   async update(req, res) {
-    const idUsuario = req.params.id;
+    const idUsuario = req.body.id;
     const usuario = req.body;
     const result = await UsuarioRepository.update(usuario, idUsuario)
     res.json(result)

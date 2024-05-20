@@ -20,7 +20,14 @@ router.delete("/deletarAluno/:id", AlunoController.delete)
 //LOGIN
 
 router.get("/login", LoginController.index)
-router.post("/cadastrarLogin", LoginController.show)
+router.get("/telaCadastro", LoginController.cad)
+router.get("/telaConfirmacaoEmail", LoginController.showTelaConfirmacao)
+
+router.post("/enviarToken", LoginController.enviarEmailComToken)
+router.post("/confirmarEmail", LoginController.confirmarEmail)
+router.post("/perfilUsuario", LoginController.show)
+router.post("/cadastrarUsuario", LoginController.store)
+router.put("/atualizarPerfil/:id", LoginController.update)
 
 //CRUD USUÁRIO
 router.get("/buscarUsuarios", UsuarioController.index)

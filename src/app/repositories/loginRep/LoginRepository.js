@@ -6,20 +6,19 @@ var salt = bcrypt.genSaltSync(10);
 var hash = bcrypt.hashSync("B4co//", salt);
 
 class LoginRepository {
-
   async validarLogin(email, senha) {
     try {
       const sql = "SELECT * FROM tbl_usuario WHERE email=?;";
-      resBusca = consulta(
+      const resBusca = await consulta(
         sql,
         email,
         `Não conseguimos encontrar este usuário.`
       );
-      if (resBusca.lenght > 0) {
-        const usuario = resBusca[0];
-        const senhaValida = await bcrypt.compare(senha, usuario.senha);
 
-        if (senhaValida) {
+      if (resBusca) {
+        const usuario = resBusca[0];
+
+        if (usuario.senha == senha) {
           return { success: true, usuario };
         } else {
           return { success: false, message: "Senha incorreta." };

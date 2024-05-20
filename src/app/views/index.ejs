@@ -63,6 +63,7 @@
         .login-container .forgot-password {
             color: #4CAF50;
             text-decoration: none;
+            margin: 30px;
         }
         .login-container .forgot-password:hover {
             text-decoration: underline;
@@ -72,12 +73,20 @@
 <body>
     <div class="login-container">
         <h1>Login</h1>
-        <form action="#" method="post">
+        <form action="/perfilUsuario" method="post">
             <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="password" placeholder="password" required>
             <button type="submit" class="btn">Login</button>
         </form>
-        <a href="#" class="forgot-password">Forgot your password?</a>
+        <a href="#" class="forgot-password">Esqueci minha senha</a>
+        <br>
+        <a href="/telaCadastro" class="forgot-password">Cadastrar conta</a>
     </div>
+
+    <script>
+        /*function clickLogin(){
+            window.location.replace("http://localhost:3000/login")
+        }*/
+    </script>
 </body>
 </html>
