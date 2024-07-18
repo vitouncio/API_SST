@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
-import UsuarioRepository from '../repositories/UsuarioRepository.js';
+import UsuarioRepository from '../model/UsuarioDAO.js';
 
 // Configuração do Nodemailer
 const transporter = nodemailer.createTransport({

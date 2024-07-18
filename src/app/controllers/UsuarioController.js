@@ -1,42 +1,83 @@
-import UsuarioRepository from "../repositories/UsuarioRepository.js";
+import UsuarioDAO from "../model/UsuarioDAO.js";
 
 class UsuarioController {
   async index(req, res) {
-    const result = await UsuarioRepository.findAll();
+    const result = await UsuarioDAO.findAll();
     res.json(result);
   }
 
   async show(req, res) {
     const id = req.params.id;
-    const result = await UsuarioRepository.findById(id);
-    res.json(result)
-  
+    const result = await UsuarioDAO.findById(id);
+    res.json(result);
   }
-  
+
   async showEmail(req, res) {
     const id = req.params.id;
-    const result = await UsuarioRepository.findById(id);
-    res.json(result)
+    const result = await UsuarioDAO.findById(id);
+    res.json(result);
   }
 
-  async store(req, res) {
+  async telaCadastroUsuario(req, res) {
+    try {
+      res.render("usuario/cadastroUsuario");
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async telaEditarUsuario(req, res) {
+    try {
+      const usuario_id = req.params.id;
+
+      const usuario = await UsuarioDAO.findById(usuario_id);
+      res.render("usuario/telaEditarUsuario", { usuario });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async telaBuscarUsuarios(req, res) {
+    try {
+      const usuarios = await UsuarioDAO.findAll();
+
+      res.render("usuario/telaBuscarUsuarios", { usuarios });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async cadastrarUsuario(req, res) {
     const usuario = req.body;
-    const result = await UsuarioRepository.create(usuario)
-    res.json(result)
+    delete usuario.confirmar_senha;
+    try {
+      const result = await UsuarioDAO.create(usuario);
+      res.redirect("/homeUsuario");
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  async update(req, res) {
-    const idUsuario = req.body.id;
-    const usuario = req.body;
-    const result = await UsuarioRepository.update(usuario, idUsuario)
-    res.json(result)
-    
-  }
-
-  async delete(req, res) {
+  async atualizarUsuario(req, res) {
     const idUsuario = req.params.id;
-    const result = await UsuarioRepository.delete(idUsuario)
-    res.json(result)
+    const usuario = req.body;
+    delete usuario.confirmar_senha;
+    try {
+      await UsuarioDAO.update(usuario, idUsuario);
+      res.status(200).json({ message: "Deu bom" });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async deletarUsuario(req, res) {
+    const idUsuario = req.params.id;
+    try {
+
+      await UsuarioDAO.delete(idUsuario);
+      res.status(200).json({ message: "Deu bom" });
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import FornecedorRepository from "../repositories/FornecedorRepository.js";
+import FornecedorRepository from "../model/FornecedorDAO.js";
 
 class FornecedorController {
   async index(req, res) {

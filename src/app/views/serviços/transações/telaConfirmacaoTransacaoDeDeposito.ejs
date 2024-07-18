@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirmação de Transação</title>
+  </head>
+  <body>
+    <!-- telaConfirmacaoDeposito.ejs -->
+    <h1>Confirmação de Transação</h1>
+    <form id="confirmarDepositoForm" action="/confirmarTransacao" method="POST">
+
+      <input type="hidden" name="tipo_entrada" value="" />
+
+      <p>Nome: <%= nome_cliente %><br></p>
+      <input type="hidden" name="nome_cliente" value="<%= nome_cliente %>" />
+      <input type="hidden" name="id_cliente" value="<%= id_cliente %>" />
+
+      <p>Conta: <%= numero_conta %></p>
+      <input type="hidden" name="numero_conta" value="<%= numero_conta %>" />
+
+      <p>Agência: <%= numero_agencia %></p>
+      <input type="hidden" name="numero_agencia" value="<%= numero_agencia %>" />
+
+      <p>Valor: <%= valor_deposito %></p>
+      <input type="hidden" name="valor_deposito" value="<%= valor_deposito %>" />
+      
+      <p>Forma de Pagamento: <%= tipo_pagamento %></p>
+      <input type="hidden" name="tipo_pagamento_saida_deposito" value="<%= tipo_pagamento %>" />
+
+      <p>Troco: <%= troco %></p>
+      <input type="hidden" name="troco" value="<%= troco %>" />
+
+      <input type="hidden" name="id_origem" value="<%= insertId %>" />
+      <input type="hidden" name="tipo_saida" value="Depósito" />
+      
+      <label for="tipoSaida">Forma de pagamento do troco:</label>
+      <br>
+      <select id="tipoSaida" name="tipo_pagamento_saida">
+        <option value="Dinheiro">Dinheiro</option>
+        <option value="Pix">Pix</option>
+        <option value="Cheque">Cheque</option>
+      </select>
+<br>
+<br>
+<br>
+      <button type="submit" id="confirmarDepositoButton">Confirmar Transação</button>
+    </form>
+    
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <a href="/homeUsuario">Voltar para a página inicial</a>
+  </body>
+</html>
+
+<style>
+  body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #333;
+  }
+  .container {
+      max-width: 400px;
+      margin-top: 50px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      text-align: center;
+  }
+  .header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #5df76a;
+      color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .header h1 {
+      margin: 0;
+  }
+  .notification {
+      color: green;
+      margin-bottom: 20px;
+      font-size: 16px;
+  }
+  .result {
+      margin-top: 20px;
+  }
+  .result p {
+      font-size: 18px;
+      font-weight: bold;
+  }
+  .result button {
+      background-color: #15db03;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+  .result button:hover {
+      background-color: #13a106;
+  }
+</style>

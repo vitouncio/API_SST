@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Malote</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .container {
+        width: 80%;
+        margin-top: 50px;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+      }
+      .btn:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Cadastro de Malote</h1>
+      <form id="cadastroMaloteForm" action="/cadastrarMalote/<%= idClientePj %>" method="POST">
+        <div class="form-group">
+          <label for="responsavel">Funcionário Responsável:</label>
+          <select id="responsavel" name="id_funcionario">
+            <% funcionarios.forEach(funcionario => { %>
+            <option value="<%= funcionario.id_funcionario %>"><%= funcionario.id_funcionario %> | <%= funcionario.nome_funcionario %> | <%= funcionario.cpf %> </option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="form-group">
+
+
+          <label for="valor_pix">Valor Pix:</label>
+          <input type="number" id="valor_pix" name="valor_pix_declarado" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label for="valor_cheque">Valor Cheque:</label>
+          <input type="number" id="valor_cheque" name="valor_cheque_declarado" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label for="valor_dinheiro">Valor Dinheiro:</label>
+          <input type="number" id="valor_dinheiro" name="valor_dinheiro_declarado" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label for="valor_declarado">Valor Declarado:</label>
+          <input type="number" id="valor_declarado" name="valor_declarado" readonly />
+        </div>
+
+        <input type="hidden" name="status" value="pendente" />
+
+
+        <button type="submit" class="btn">Cadastrar Malote</button>
+      </form>
+    </div>
+
+    <script>
+      function updateValorDeclarado() {
+        const valorPix = parseFloat(document.getElementById('valor_pix').value) || 0;
+        const valorCheque = parseFloat(document.getElementById('valor_cheque').value) || 0;
+        const valorDinheiro = parseFloat(document.getElementById('valor_dinheiro').value) || 0;
+
+        const valorDeclarado = valorPix + valorCheque + valorDinheiro;
+        document.getElementById('valor_declarado').value = valorDeclarado.toFixed(2);
+      }
+
+      document.getElementById('valor_pix').addEventListener('input', updateValorDeclarado);
+      document.getElementById('valor_cheque').addEventListener('input', updateValorDeclarado);
+      document.getElementById('valor_dinheiro').addEventListener('input', updateValorDeclarado);
+
+      // Initialize the value when the page loads
+      updateValorDeclarado();
+    </script>
+  </body>
+</html>

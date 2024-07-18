@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Cliente</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #01b30a;
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .header button {
+            background-color: #fff;
+            color: #dd9611;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .header button:hover {
+            background-color: #e7e7e7;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .container h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #12923d;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group input[type="submit"] {
+            background-color: #049911;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #1dbe25;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .popup.show {
+            display: block;
+        }
+        .popup button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .popup button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="header">
+        <header>
+            <a href="/homeUsuario">
+              <img src="imagens/logo_sollo.jpg" alt="Logo" class="home-icon">
+          </a>
+          </header>
+        <h1>Cadastro de Usuário</h1>
+    </div>
+    
+    <div class="container">
+        <h2>Preencha os dados abaixo</h2>
+        <form action="/cadastrarUsuario" method="POST">
+            <div class="form-group">
+                <label for="tipo_usuario">Tipo:</label>
+                <select id="tipo_usuario" name="tipo_usuario" required>
+                    <option value="FUNC">Funcionário</option>
+                    <option value="ADMIN">Administrador</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nome_usuario">Nome:</label>
+                <input type="text" id="nome_usuario" name="nome_usuario" required>
+            </div>
+            <div class="form-group">
+                <label for="email_usuario">Email:</label>
+                <input type="email" id="email_usuario" name="email_usuario" required>
+            </div>
+            <div class="form-group">
+                <label for="telefone_usuario">Telefone:</label>
+                <input type="text" id="telefone_usuario" name="telefone_usuario" required>
+            </div>
+            <div class="form-group">
+                <label for="senha_usuario">Senha:</label>
+                <input type="password" id="senha_usuario" name="senha_usuario" required>
+                
+            </div>
+            <div class="form-group">
+                <label for="confirmar_senha">Confirmar Senha:</label>
+                <input type="password" id="confirmar_senha" name="confirmar_senha" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Cadastrar">
+            </div>
+        </form>
+    </div>
+    <div id="popup" class="popup">
+        <p>Usuário criado com sucesso!</p>
+        <button href="/homeUsuario">Home</button>
+        <button href="/telaBuscarClientes">Ver usuários</button>
+    </div>
+    <!-- Adicionando biblioteca jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Adicionando biblioteca jQuery Mask Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        function closePopup() {
+            document.getElementById('popup').classList.remove('show');
+        }
+
+        function text(){
+
+        }
+
+        // Verifica se existe a variável success e exibe o pop-up
+         if (typeof success !== 'undefined' && success) { 
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('popup').classList.add('show');
+            });
+         }
+
+        // Aplicando máscaras aos campos
+        $(document).ready(function() {
+            $('#telefone_usuario').mask('(00) 00000-0000');
+        });
+    </script>
+</body>
+</html>

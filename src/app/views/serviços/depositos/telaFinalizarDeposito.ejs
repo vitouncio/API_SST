@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Troco</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .notification {
+            color: green;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .result button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .result button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">      
+        
+        <form action="/finalizarDeposito" method="POST">
+
+        <input type="hidden" name="tipo_saida" value="Troco Depósito" />
+
+        <div class="notification" id="notification" style="display: none;">
+            Depósito realizado com sucesso!
+        </div>
+        <div class="result" id="result" style="display: none;">
+            <p>Troco a ser entregue: R$ <%= troco %> </p><br>
+            <input type="hidden" name="troco" value="<%= troco %>" />
+
+
+            <label for="tipo_pagamento_troco">Forma de devolução:<label>
+        <select id="tipo_pagamento_troco" name="tipo_pagamento">
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Pix">Pix</option>
+          <option value="Cheque">Cheque</option>
+        </select>
+        </div>
+        <button type="submit">Finalizar Depósito</button>
+    </form>
+    </div>
+    
+    <script>
+        // Script para mostrar as notificações e resultados
+        // Assumindo que você tem variáveis para determinar se o depósito foi realizado e o valor do troco
+        const depositoRealizado = true; // Troque para a condição real
+        const troco = "<%= troco %>" // O valor real do troco
+
+        if (depositoRealizado) {
+            document.getElementById('notification').style.display = 'block';
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

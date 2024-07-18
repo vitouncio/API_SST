@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil do Cliente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <style>
+
+.actions {
+            text-align: center;
+        }
+        .actions i {
+            cursor: pointer;
+            margin: 0 5px;
+        }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .container {
+        width: 80%;
+        margin-top: 50px;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+      }
+      .btn:hover {
+        background-color: #0056b3;
+      }
+      .tabs {
+        display: flex;
+        margin-top: 20px;
+      }
+      .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-right: 5px;
+      }
+      .tab.active {
+        background-color: #007bff;
+        color: white;
+      }
+      .tab-content {
+        margin-top: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Perfil do Cliente</h1>
+      <div class="profile-info">
+        <p>Nome: <%= cliente.nome_cliente %></p>
+        <p>Email: <%= cliente.email_cliente %></p>
+        <p>Telefone: <%= cliente.telefone_cliente %></p>
+      </div>
+
+      <% if (cliente.tipo_cliente === 'PF') { %>
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('depositos')">Depósitos</div>
+        <div class="tab" onclick="showTab('saques')">Saques</div>
+        <div class="tab" onclick="showTab('contas')">Contas</div>
+        <div class="tab" onclick="showTab('historico')">Histórico</div>
+      </div>
+      <div class="tab-content" id="depositos">
+        <!-- Conteúdo da aba Depósitos -->
+        <h2>Depósitos</h2>
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">Data</th>
+              <th onclick="sortTable(1)">Valor</th>
+              <th onclick="sortTable(2)">Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Itere sobre os depósitos do cliente e exiba os dados aqui -->
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-content" id="saques" style="display: none">
+        <!-- Conteúdo da aba Saques -->
+        <h2>Saques</h2>
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">Data</th>
+              <th onclick="sortTable(1)">Valor</th>
+              <th onclick="sortTable(2)">Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Itere sobre os saques do cliente e exiba os dados aqui -->
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-content" id="contas" style="display: none">
+        <!-- Conteúdo da aba Contas -->
+        <h2>Contas</h2>
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">Data</th>
+              <th onclick="sortTable(1)">Valor</th>
+              <th onclick="sortTable(2)">Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Itere sobre as contas do cliente e exiba os dados aqui -->
+          </tbody>
+        </table>
+      </div>
+     
+      <% } else if (cliente.tipo_cliente === 'PJ') { %>
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('malotes')">Malotes</div>
+        <div class="tab" onclick="showTab('saques')">Saques</div>
+        <div class="tab" onclick="showTab('contas')">Contas</div>
+        <div class="tab" onclick="showTab('funcionarios')">Funcionários</div>
+        <div class="tab" onclick="showTab('historico')">Histórico</div>
+      </div>
+      <div class="tab-content" id="malotes">
+        <!-- Conteúdo da aba Malotes -->
+        <h2>Malotes</h2>
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">ID do malote</th>
+              <th onclick="sortTable(1)">Resp. Entrega</th>
+              <th onclick="sortTable(2)">Val. declarado</th>
+              <th onclick="sortTable(3)">Val. pix</th>
+              <th onclick="sortTable(4)">Val. cheque</th>
+              <th onclick="sortTable(5)">Val. dinheiro</th>
+              <th onclick="sortTable(6)">Obj. declarado</th>
+              <th onclick="sortTable(7)">Pix real</th>
+              <th onclick="sortTable(8)">Cheque real</th>
+              <th onclick="sortTable(9)">Dinheiro real</th>
+              <th onclick="sortTable(10)">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% malotes.forEach(malote => { %>
+            <tr>
+              <td><%= malote.id_malote %></td>
+              <td><%= malote.id_funcionario%> | <%= malote.nome_funcionario%></td>
+              <td><%= malote.valor_declarado %></td>
+              <td><%= malote.valor_pix_declarado %></td>
+              <td><%= malote.valor_cheque_declarado %></td>
+              <td><%= malote.valor_dinheiro_declarado %></td>
+              <td><%= malote.obj_declarado %></td>
+              <td><%= malote.pix_real %></td>
+              <td><%= malote.cheque_real %></td>
+              <td><%= malote.dinheiro_real %></td>
+              <td><%= malote.status%></td>
+              <td class="actions">
+                <i class="fas fa-edit edit" onclick="processarMalote('<%= malote.id_malote %>')"></i>
+                <i class="fas fa-trash delete" onclick="removerCliente('<%= malote.id_malote %>')"></i>
+                <i class="fas fa-user profile" onclick="devolverMalote('<%= malote.id_malote %>')"></i>
+            </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <button
+          class="btn"
+          onclick="adicionarMalote('<%= cliente.id_cliente %>')"
+        >
+          Adicionar Malote
+        </button>
+      </div>
+      <div class="tab-content" id="saques" style="display: none">
+        <!-- Conteúdo da aba Saques -->
+        <h2>Saques</h2>
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">Data</th>
+              <th onclick="sortTable(1)">Valor</th>
+              <th onclick="sortTable(2)">Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Itere sobre os saques do cliente e exiba os dados aqui -->
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-content" id="contas" style="display: none">
+        <!-- Conteúdo da aba Contas -->
+        <h2>Contas</h2>
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">Data</th>
+              <th onclick="sortTable(1)">Valor</th>
+              <th onclick="sortTable(2)">Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Itere sobre as contas do cliente e exiba os dados aqui -->
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-content" id="funcionarios" style="display: none">
+        <!-- Conteúdo da aba Funcionários -->
+        <h2>Funcionários</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th onclick="sortTable(0)">Nome</th>
+              <th onclick="sortTable(1)">CPF</th>
+              <th onclick="sortTable(2)">Email</th>
+              <th onclick="sortTable(3)">Telefone</th>
+              <th onclick="sortTable(4)">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% funcionarios.forEach(funcionario => { %>
+            <tr>
+              <td><%= funcionario.nome_funcionario %></td>
+              <td><%= funcionario.cpf %></td>
+              <td><%= funcionario.email_funcionario %></td>
+              <td><%= funcionario.telefone_funcionario %></td>
+              <td>
+                <button
+                  class="btn"
+                  onclick="editarFuncionario('<%= funcionario.id_funcionario %>')"
+                >
+                  Editar
+                </button>
+                <button
+                  class="btn"
+                  onclick="confirmarExclusao('<%= funcionario.id_funcionario %>')"
+                >
+                  Excluir
+                </button>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <br />
+        <button
+          class="btn"
+          onclick="adicionarFuncionario('<%= cliente.id_cliente %>')"
+        >
+          Adicionar Funcionário
+        </button>
+      </div>
+     
+      <% } %>
+    </div>
+
+    <script>
+
+function sortTable(n) {
+            const table = document.getElementById("minhaTabela");
+            let rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            switching = true;
+            dir = "asc"; 
+            
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                    if (dir === "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir === "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount++;
+                } else {
+                    if (switchcount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+
+      function processarMalote(id){
+        window.location.href = `/telaProcMalote/${id}`;
+
+      }
+      function deletarMalote(id){
+        window.location.href = `/deletarMalote/${id}`;
+
+      }
+      function devolverMalote(id){
+        window.location.href = `/telaDevolucaoMalote/${id}`;
+
+      }
+
+      function showTab(tabId) {
+        const tabs = document.querySelectorAll(".tab-content");
+        tabs.forEach((tab) => {
+          tab.style.display = "none";
+        });
+        document.getElementById(tabId).style.display = "block";
+
+        const tabButtons = document.querySelectorAll(".tab");
+        tabButtons.forEach((tab) => {
+          tab.classList.remove("active");
+        });
+        document
+          .querySelector(`.tab[onclick="showTab('${tabId}')"]`)
+          .classList.add("active");
+      }
+
+      function adicionarFuncionario(id) {
+        window.location.href = `/telaCadFuncionario/${id}`;
+      }
+
+      function editarFuncionario(id) {
+        window.location.href = `/telaEditarFuncionario/${id}`;
+      }
+
+      async function confirmarExclusao(id) {
+        if (confirm("Você realmente deseja excluir este funcionário?")) {
+          try {
+            const response = await fetch(`/deletarFuncionario/${id}`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            if (response.ok) {
+              window.location.reload();
+            } else {
+              console.error("Failed to delete the employee");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        }
+      }
+
+      function adicionarMalote(id){
+        window.location.href = `/telaCadMalote/${id}`;
+      }
+
+      showTab("depositos"); // Exibir a primeira aba por padrão
+    </script>
+  </body>
+</html>

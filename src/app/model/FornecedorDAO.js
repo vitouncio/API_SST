@@ -1,4 +1,4 @@
-import {consulta} from "../database/connection.js";
+import {consulta} from "../connections/connection.js";
 
 class fornecedorRepository {
   //CRUD
