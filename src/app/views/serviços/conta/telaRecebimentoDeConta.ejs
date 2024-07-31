@@ -103,63 +103,10 @@
   <body>
     <div class="container">
       <a href="/homeUsuario">
-        <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
+        <img src="imagens/logo_sollo.jpg" alt="Logo" class="home-icon">
     </a>
-      <h1>Processamento de Malote</h1>
-      <div class="form-group">
-        <label for="idMalote">ID do Malote:</label>
-        <input
-          type="text"
-          id="idMalote"
-          value="<%= malote.id_malote %>"
-          disabled
-        />
-      </div>
-      <div class="form-group">
-        <label for="nomeFuncionario">Funcionário Responsável:</label>
-        <input
-          type="text"
-          id="nomeFuncionario"
-          value="<%= malote.nome_funcionario%>"
-          disabled
-        />
-      </div>
-      <div class="form-group">
-        <label for="nomeEmpresa">Empresa:</label>
-        <input
-          type="text"
-          id="nomeEmpresa"
-          value="<%= malote.nome_cliente%>"
-          disabled
-        />
-      </div>
-      <div class="form-group">
-        <label for="statusMalote">Status:</label>
-        <input
-          type="text"
-          id="statusMalote"
-          value="<%= malote.status%>"
-          disabled
-        />
-      </div>
-      <div class="form-group">
-        <label for="valorTotal">Valor Total do Malote:</label>
-        <input
-          type="text"
-          id="valorTotal"
-          value="<%= malote.valor_declarado%>"
-          disabled
-        />
-      </div>
-      <div class="form-group">
-        <label for="troco">Troco:</label>
-        <input
-          type="text"
-          id="troco"
-          value="<%= malote.valor_declarado %>"
-          disabled
-        />
-      </div>
+      <h1>Pagamento de contas</h1>
+      
       <div class="tabs">
         <div class="tab active" data-tab="tab-1">
           Processamento de Código de Barras
@@ -489,8 +436,6 @@
             const pagamentos = [];
             const troco = document.getElementById("troco").value;
             const observacao = document.getElementById("observacao").value;
-            const id_cliente = "<%= malote.id_cliente %>";
-            const id_funcionario = "<%= malote.id_funcionario %>";
 
             rows.forEach((row) => {
               const cols = row.querySelectorAll("td");
@@ -505,7 +450,7 @@
 
             try {
               const response = await fetch(
-                `/processarMalote/<%= malote.id_malote %>`,
+                `/PagarContas`,
                 {
                   method: "POST",
                   headers: {

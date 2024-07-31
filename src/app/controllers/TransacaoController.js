@@ -20,40 +20,47 @@ class TransacaoController {
   //FAÇO TABELA GUICHE??
   //const id_guiche = ??????
   async registrarTransacao(req, res, next) {
-    console.log(req.body);
     let {
       id_cliente,
-      valorTransacao,
-      tipo_pagamento_saida,
-      tipo_entrada,
+      valor,
+      tipo_pagamento,
       troco,
-      tipo_saida,
+      tipo_transacao,
       id_origem,
       id_saida,
+      tipo_pagamento_troco
     } = req.body;
     const id_usuario = req.session.usuario.usuario.id_usuario;
     const data = new Date();
     const data_entrada = format(data, "dd/MM/yyyy HH:mm:ss");
     try {
-      const dados_entrada = {
+      const dados_transacao = {
         id_origem,
         id_usuario,
-        valor_transacao: valorTransacao,
+        valor_transacao: valor,
         data_transacao: data_entrada,
-        tipo_transacao: tipo_entrada,
+        tipo_transacao,
+        tipo_pagamento_transacao: tipo_pagamento,
         destino: id_saida,
       };
-      await TransacaoDAO.cadastrarTransacao(dados_entrada);
+      const {insertId} = await TransacaoDAO.cadastrarTransacao(dados_transacao);
+      const id_transacao = {insertId}
+
+
+      /*faço uma thread para acessar a entradaController e atualizar o valor do campo
+        id_transação??? seria top 
+      */
+
 
       if (troco > 0) {
-        tipo_entrada = "Troco";
+        let tipo_transacao = "Troco";
         const transacao_troco = {
           id_origem,
           id_usuario,
           valor_transacao: troco,
           data_transacao: data_entrada,
-          tipo_transacao: tipo_entrada,
-          tipo_pagamento_transacao: tipo_saida,
+          tipo_transacao,
+          tipo_pagamento_transacao: tipo_pagamento_troco,
           destino: id_saida,
         };
         if(!transacao_troco){
@@ -165,7 +172,18 @@ class TransacaoController {
       .status(500)
       .json({ error: "An error occurred while deleting the Transacao" });
   }
+
+  async buscarTransacao(req, res) {
+    const id_transacao = req.params.id;
+    try {
+      const transacao = await TransacaoDAO.findById(id_transacao);
+      res.json(transacao);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
+
 
 //padrão singleton
 export default new TransacaoController();

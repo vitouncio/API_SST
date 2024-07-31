@@ -16,16 +16,38 @@ class EntradaDAO {
   }
 
   async findById(id) {
-    const sql = "SELECT * FROM tbl_entradas WHERE id_entrada=?;";
-    const result = await consulta(
-      sql,
-      id,
-      `Não conseguimos encontrar o Entrada de id: ${id}`
-    );
-    if (result.length === 0) {
-      throw new Error("Id inválido");
-    } else {
-      return result[0];
+    try {
+      const sql = `
+        SELECT 
+            e.*,
+            c.tipo_cliente, 
+            c.nome_cliente, 
+            c.email_cliente, 
+            c.telefone_cliente, 
+            c.cpf_cnpj,
+            cc.numero_agencia, 
+            cc.numero_conta
+        FROM 
+            tbl_entradas e
+        JOIN 
+            tbl_clientes c ON e.id_cliente = c.id_cliente
+        JOIN 
+            tbl_contas_caixa cc ON c.id_conta_caixa = cc.id_conta
+        WHERE 
+            e.id_entrada = ?;
+    `;
+      const result = await consulta(
+        sql,
+        [id],
+        `Não conseguimos encontrar o Entrada de id: ${id}`
+      );
+      if (result.length === 0) {
+        throw new Error("Id inválido");
+      } else {
+        return result[0];
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 

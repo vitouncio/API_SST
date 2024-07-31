@@ -15,14 +15,9 @@ class ContaController {
     }
   }
 
-  async telaCadastroConta(req, res) {
-    const idClientePj = req.params.id;
-    const funcionarios = await FuncionarioDAO.findAllByIdCliente(idClientePj);
+  async telaRecebimentoDeConta(req, res) {
     try {
-      res.render("serviços/malote/telaCadConta", {
-        idClientePj,
-        funcionarios,
-      });
+      res.render("serviços/conta/telaRecebimentoDeConta");
     } catch (err) {
       console.log(err);
     }

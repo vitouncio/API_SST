@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saque</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #15db03;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+      margin-bottom: 20px;
+    }
+    button:hover {
+      background-color: #13a106;
+    }
+    /* Tabela */
+    #historicoSaques {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    #historicoSaques,
+    #historicoSaques th,
+    #historicoSaques td {
+      border: 1px solid #ddd;
+    }
+    #historicoSaques th,
+    #historicoSaques td {
+      padding: 12px;
+      text-align: left;
+    }
+    #historicoSaques th {
+      background-color: #08e401;
+      color: #fff;
+    }
+    #historicoSaques tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    #historicoSaques tr:hover {
+      background-color: #e9ecef;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/homeUsuario">
+      <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
+  </a>
+    <h2>Histórico de Saques</h2>
+    <button onclick="window.location.href='/telaCadSaque'">Cadastrar Saque</button>
+    <table id="historicoSaques">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome do Cliente</th>
+          <th>Agência</th>
+          <th>Conta</th>
+          <th>Valor</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Os dados dos saques serão inseridos aqui via JavaScript -->
+      </tbody>
+    </table>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("/buscarHistoricoDeSaques")
+        .then(response => response.json())
+        .then(data => {
+          const tbody = document.querySelector("#historicoSaques tbody");
+          data.forEach(saque => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${saque.id_saque}</td>
+              <td>${saque.nome_cliente}</td>
+              <td>${saque.numero_agencia}</td>
+              <td>${saque.numero_conta}</td>
+              <td>${saque.valor_saque}</td>
+              <td>${saque.data_saque}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        })
+        .catch(error => console.error("Erro ao buscar histórico de saques:", error));
+    });
+  </script>
+</body>
+</html>

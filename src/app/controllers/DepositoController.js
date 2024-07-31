@@ -16,15 +16,50 @@ class DepositoController {
 
   async telaCadastroDeposito(req, res) {
     try {
+      res.render("serviços/depositos/telaCadDeposito");
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async telaDeposito(req, res) {
+    try {
       res.render("serviços/depositos/telaDeposito");
     } catch (err) {
       console.log(err);
     }
   }
+  async telaConfirmarDeposito(req, res) {
+    const {nome_cliente, id_cliente, numero_conta, numero_agencia, valor_deposito, valor_entrada, tipo_pagamento,troco} = req.body
+    try {
   
+         res.render("serviços/transações/telaConfirmacaoTransacaoDeDeposito", {nome_cliente, id_cliente, numero_conta, numero_agencia, valor_deposito,valor_entrada, tipo_pagamento, troco });
+      } catch (err) {
+      console.log(err);
+    }
+  }
+  
+  async buscarHistoricoDeDepositos(req,res){
+    try{
+      const historico = await DepositoDAO.findHistorico()
+      res.json(historico) 
+    }catch(err){
+      console.log(err)
+    }
+  }
+  async buscarDeposito(req,res){
+    const id_deposito = req.params.id
+    try{
+      const deposito = await DepositoDAO.findById(id_deposito
+      )
+      res.json(deposito) 
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   async cadastrarDeposito(req, res,next) {
-    const {nome_cliente, id_cliente, numero_conta, numero_agencia, valor_deposito, tipo_pagamento,troco} = req.body
+    console.log(req.body)
+    const {nome_cliente, id_cliente, numero_conta, numero_agencia, valor, tipo_pagamento,troco} = req.body
     const id_usuario = req.session.usuario.usuario.id_usuario;
     const data = new Date();
     const data_deposito = format(data, "dd/MM/yyyy HH:mm:ss");
@@ -32,12 +67,13 @@ class DepositoController {
       const dados_deposito = {
         id_usuario,
         id_cliente,
-        valor_deposito,
+        valor_deposito: valor,
         tipo_pagamento,
         data_deposito,
       };
        const {insertId} = await DepositoDAO.cadastrarDeposito(dados_deposito);
-       res.render("serviços/transações/telaConfirmacaoTransacaoDeDeposito", {nome_cliente, id_cliente, numero_conta, numero_agencia, valor_deposito, tipo_pagamento, insertId, troco });
+      req.body.id_origem = insertId
+      next()
 
     } catch (error) {
       console.log(error);

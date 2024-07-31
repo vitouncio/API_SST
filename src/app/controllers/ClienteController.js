@@ -13,6 +13,7 @@ class ClienteController {
 
   async telaPerfilCliente(req, res) {
     try {
+      console.log(req.params.id)
       const cliente = await ClienteDAO.findById(req.params.id);
 
       if (cliente.tipo_cliente === "PJ") {
@@ -129,8 +130,8 @@ class ClienteController {
 
   async buscarClientesComContaCaixa(req, res) {
     try {
-      const clientesComContaCaixa = await ClienteDAO.findAllClientesComContaCaixa();
-      res.json(clientesComContaCaixa);
+      const cliente = await ClienteDAO.findAllClientesComContaCaixa();
+      res.json(cliente);
     } catch (err) {
       console.log(err);
       res.status(500).send("Erro ao buscar clientes com conta caixa");

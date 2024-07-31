@@ -38,9 +38,12 @@ app.use((req, res, next) => {
   }
 });
 
+// Middleware para servir arquivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 // Usar o router
 app.use(routes);
 
-//ROTAS QUE PRECISAM DE VERIFICAÇÃO
 
 export default app;

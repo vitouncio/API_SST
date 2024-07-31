@@ -6,9 +6,14 @@
     <title>Confirmação de Transação</title>
   </head>
   <body>
+    <a href="/homeUsuario">
+      <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
+  </a>
     <!-- telaConfirmacaoDeposito.ejs -->
     <h1>Confirmação de Transação</h1>
-    <form id="confirmarDepositoForm" action="/confirmarTransacao" method="POST">
+    <form id="confirmarDepositoForm" action="/confirmarTransacaoDeposito" method="POST">
+
+      <h2>Dados do depósito</h2>
 
       <input type="hidden" name="tipo_entrada" value="" />
 
@@ -23,26 +28,30 @@
       <input type="hidden" name="numero_agencia" value="<%= numero_agencia %>" />
 
       <p>Valor: <%= valor_deposito %></p>
-      <input type="hidden" name="valor_deposito" value="<%= valor_deposito %>" />
+      <input type="hidden" name="valor" value="<%= valor_deposito %>" />
+      
+      <p>Valor Entrada: <%= valor_entrada %></p>
+      <input type="hidden" name="valor_entrada" value="<%= valor_entrada %>" />
       
       <p>Forma de Pagamento: <%= tipo_pagamento %></p>
-      <input type="hidden" name="tipo_pagamento_saida_deposito" value="<%= tipo_pagamento %>" />
+      <input type="hidden" name="tipo_pagamento" value="<%= tipo_pagamento %>" />
 
+      <hr>
+      <h2>Troco</h2>
       <p>Troco: <%= troco %></p>
       <input type="hidden" name="troco" value="<%= troco %>" />
 
-      <input type="hidden" name="id_origem" value="<%= insertId %>" />
-      <input type="hidden" name="tipo_saida" value="Depósito" />
+      <input type="hidden" name="tipo_transacao" value="Depósito" />
       
-      <label for="tipoSaida">Forma de pagamento do troco:</label>
+      <label for="tipoSaida">Forma de pagamento:</label>
       <br>
-      <select id="tipoSaida" name="tipo_pagamento_saida">
+      <br>
+      <select id="tipoSaida" name="tipo_pagamento_troco">
         <option value="Dinheiro">Dinheiro</option>
         <option value="Pix">Pix</option>
         <option value="Cheque">Cheque</option>
       </select>
-<br>
-<br>
+      <hr>
 <br>
       <button type="submit" id="confirmarDepositoButton">Confirmar Transação</button>
     </form>

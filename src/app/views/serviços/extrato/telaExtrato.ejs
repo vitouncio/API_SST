@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extratos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #e9ecef;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #08e401;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        .tipo-entrada {
+            color: green;
+        }
+        .tipo-saida {
+            color: red;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+            max-width: 600px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #969595;
+            padding-bottom: 10px;
+        }
+        .modal-body {
+            padding: 20px 0;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        .modal-footer button {
+            margin-left: 10px;
+        }
+        .modal-body table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .modal-body table, .modal-body th, .modal-body td {
+            border: none;
+            padding: 8px;
+            text-align: left;
+        }
+        .modal-body th {
+            background-color: #489431;
+            font-weight: bold;
+        }
+        .modal-body td {
+            background-color: #d1d1d1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Add your header content here if needed -->
+    </header>
+    <div class="container">
+        <a href="/homeUsuario">
+            <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
+        </a>
+        <h2>Extratos</h2>
+
+        <!-- Tabela de histórico de extratos -->
+        <table id="tabelaHistoricoExtratos">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>ID Usuário</th>
+                    <th>Subtipo</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>ID Origem</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Conteúdo será preenchido via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div id="detalhesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Detalhes da Origem</h2>
+                <span id="closeModal" style="cursor:pointer;">&times;</span>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <th>ID Entrada</th>
+                        <td id="id_entrada"></td>
+                    </tr>
+                    <tr>
+                        <th>ID Usuário</th>
+                        <td id="id_usuario"></td>
+                    </tr>
+                    <tr>
+                        <th>ID Guichê</th>
+                        <td id="id_guiche"></td>
+                    </tr>
+                    <tr>
+                        <th>ID Cliente</th>
+                        <td id="id_cliente"></td>
+                    </tr>
+                    <tr>
+                        <th>Valor Entrada</th>
+                        <td id="valor_entrada"></td>
+                    </tr>
+                    <tr>
+                        <th>Data Entrada</th>
+                        <td id="data_entrada"></td>
+                    </tr>
+                    <tr>
+                        <th>Tipo Entrada</th>
+                        <td id="tipo_entrada"></td>
+                    </tr>
+                    <tr>
+                        <th>Tipo Pagamento</th>
+                        <td id="tipo_pagamento"></td>
+                    </tr>
+                    <tr>
+                        <th>ID Transação</th>
+                        <td id="id_transacao"></td>
+                    </tr>
+                    <tr>
+                        <th>Tipo Cliente</th>
+                        <td id="tipo_cliente"></td>
+                    </tr>
+                    <tr>
+                        <th>Nome Cliente</th>
+                        <td id="nome_cliente"></td>
+                    </tr>
+                    <tr>
+                        <th>Email Cliente</th>
+                        <td id="email_cliente"></td>
+                    </tr>
+                    <tr>
+                        <th>Telefone Cliente</th>
+                        <td id="telefone_cliente"></td>
+                    </tr>
+                    <tr>
+                        <th>CPF/CNPJ</th>
+                        <td id="cpf_cnpj"></td>
+                    </tr>
+                    <tr>
+                        <th>Agência</th>
+                        <td id="numero_agencia"></td>
+                    </tr>
+                    <tr>
+                        <th>Conta</th>
+                        <td id="numero_conta"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="fecharModal">Fechar</button>
+                <button id="irParaOrigem">Ir para Origem</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Função para buscar histórico de extratos
+            function buscarHistoricoExtratos() {
+                $.ajax({
+                    url: '/buscarHistoricoExtratos',
+                    method: 'GET',
+                    success: function(data) {
+                        const tabelaBody = $('#tabelaHistoricoExtratos tbody');
+                        tabelaBody.empty();
+                        data.forEach(extrato => {
+                            const tipoIcone = extrato.tipo_extrato === 'Entrada' 
+                                ? '<i class="fas fa-arrow-up tipo-entrada"></i>' 
+                                : '<i class="fas fa-arrow-down tipo-saida"></i>';
+                            tabelaBody.append(`
+                                <tr>
+                                    <td>${tipoIcone}</td>
+                                    <td>${extrato.id_usuario}</td>
+                                    <td>${extrato.subtipo_extrato}</td>
+                                    <td>${extrato.valor}</td>
+                                    <td>${extrato.data}</td>
+                                    <td class="id-origem" data-id="${extrato.id_origem}" data-tipo="${extrato.tipo_extrato}" data-subtipo="${extrato.subtipo_extrato}" style="cursor:pointer;">${extrato.id_origem}</td>
+                                </tr>
+                            `);
+                        });
+                    },
+                    error: function(error) {
+                        console.error('Erro ao buscar histórico de extratos:', error);
+                    }
+                });
+            }
+
+            // Carregar histórico de extratos ao carregar a página
+            buscarHistoricoExtratos();
+
+            // Função para buscar detalhes da origem
+            function buscarDetalhesOrigem(id_origem, tipo_extrato, subtipo_extrato) {
+                let url = '';
+                if (tipo_extrato === 'Entrada' && subtipo_extrato === 'Depósito') {
+                    url = `/buscarOrigemEntrada/${id_origem}`;
+
+                    $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(data) {
+                        $('#id_entrada').text(data.id_entrada);
+                        $('#id_usuario').text(data.id_usuario);
+                        $('#id_guiche').text(data.id_guiche);
+                        $('#id_cliente').text(data.id_cliente);
+                        $('#valor_entrada').text(data.valor_entrada);
+                        $('#data_entrada').text(data.data_entrada);
+                        $('#tipo_entrada').text(data.tipo_entrada);
+                        $('#tipo_pagamento').text(data.tipo_pagamento);
+                        $('#id_transacao').text(data.id_transacao);
+                        $('#tipo_cliente').text(data.tipo_cliente);
+                        $('#nome_cliente').text(data.nome_cliente);
+                        $('#email_cliente').text(data.email_cliente);
+                        $('#telefone_cliente').text(data.telefone_cliente);
+                        $('#cpf_cnpj').text(data.cpf_cnpj);
+                        $('#numero_agencia').text(data.numero_agencia);
+                        $('#numero_conta').text(data.numero_conta);
+                        $('#detalhesModal').show();
+                    },
+                    error: function(error) {
+                        console.error('Erro ao buscar detalhes da origem:', error);
+                    }
+                });
+                
+                } else if (tipo_extrato === 'Saída' && subtipo_extrato === 'Depósito') {
+                    url = `/buscarOrigemTransacaoDeposito/${id_origem}`;
+                    $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(data) {
+                        $('#id_entrada').text(data.id_entrada);
+                        $('#id_usuario').text(data.id_usuario);
+                        $('#id_guiche').text(data.id_guiche);
+                        $('#id_cliente').text(data.id_cliente);
+                        $('#valor_entrada').text(data.valor_transacao);
+                        $('#data_entrada').text(data.data_transacao);
+                        $('#tipo_entrada').text(data.tipo_transacao);
+                        $('#tipo_pagamento').text(data.tipo_pagamento_transacao);
+                        $('#id_transacao').text(data.id_transacao);
+                        $('#tipo_cliente').text(data.tipo_cliente);
+                        $('#nome_cliente').text(data.nome_cliente);
+                        $('#email_cliente').text(data.email_cliente);
+                        $('#telefone_cliente').text(data.telefone_cliente);
+                        $('#cpf_cnpj').text(data.cpf_cnpj);
+                        $('#numero_agencia').text(data.numero_agencia);
+                        $('#numero_conta').text(data.numero_conta);
+                        $('#detalhesModal').show();
+                    },
+                    error: function(error) {
+                        console.error('Erro ao buscar detalhes da origem:', error);
+                    }
+                });
+                } else if (tipo_extrato === 'Saída' && subtipo_extrato === 'Troco') {
+                    url = `/buscarOrigemTransacaoTroco/${id_origem}`;
+                    $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function(data) {
+                        $('#id_entrada').text(data.id_entrada);
+                        $('#id_usuario').text(data.id_usuario);
+                        $('#id_guiche').text(data.id_guiche);
+                        $('#id_cliente').text(data.id_cliente);
+                        $('#valor_entrada').text(data.valor_transacao);
+                        $('#data_entrada').text(data.data_transacao);
+                        $('#tipo_entrada').text(data.tipo_transacao);
+                        $('#tipo_pagamento').text(data.tipo_pagamento_transacao);
+                        $('#id_transacao').text(data.id_transacao);
+                        $('#tipo_cliente').text(data.tipo_cliente);
+                        $('#nome_cliente').text(data.nome_cliente);
+                        $('#email_cliente').text(data.email_cliente);
+                        $('#telefone_cliente').text(data.telefone_cliente);
+                        $('#cpf_cnpj').text(data.cpf_cnpj);
+                        $('#numero_agencia').text(data.numero_agencia);
+                        $('#numero_conta').text(data.numero_conta);
+                        $('#detalhesModal').show();
+                    },
+                    error: function(error) {
+                        console.error('Erro ao buscar detalhes da origem:', error);
+                    }
+                });
+                }
+
+                
+            }
+
+            // Evento de clique na coluna ID Origem
+            $(document).on('click', '.id-origem', function() {
+                const id_origem = $(this).data('id');
+                const tipo_extrato = $(this).data('tipo');
+                const subtipo_extrato = $(this).data('subtipo');
+                buscarDetalhesOrigem(id_origem, tipo_extrato, subtipo_extrato);
+            });
+
+            // Evento para fechar o modal
+            $('#closeModal, #fecharModal').click(function() {
+                $('#detalhesModal').hide();
+            });
+
+            // Evento para redirecionar para a origem
+            $('#IrParaOrigem').click(function() {
+    const id_deposito = $('#id_depositoRec').text(); // Assumindo que você tem o ID do depósito armazenado em um elemento com id "id_depositoRec"
+    window.location.href = `/telaDeposito/?id_deposito=${id_deposito}`;
+});
+
+        });
+    </script>
+</body>
+</html>

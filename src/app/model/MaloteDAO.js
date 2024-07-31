@@ -65,11 +65,11 @@ class MaloteDAO {
     e.nome_cliente,
     e.id_cliente
 FROM 
-    tbl_malote m
+    tbl_malotes m
 JOIN 
     tbl_funcionarios f ON m.id_funcionario = f.id_funcionario
 JOIN 
-    tbl_cliente e ON m.id_cliente = e.id_cliente
+    tbl_clientes e ON m.id_cliente = e.id_cliente
 WHERE 
     m.id_malote = ?;
 

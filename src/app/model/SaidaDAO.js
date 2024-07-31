@@ -1,7 +1,7 @@
 import { consulta } from "../connections/connection.js";
 
 class SaidaDAO {
-  async create(saida) {
+  async registrarSaida(saida) {
     const sql = "INSERT INTO tbl_saidas SET ?;";
     try {
       const result = await consulta(

@@ -13,24 +13,30 @@ class EntradaController {
     }
   }
 
-  //FAÇO TABELA GUICHE?? 
-    //const id_guiche = ??????
+  //FAÇO TABELA GUICHE??
+  //const id_guiche = ??????
   async registrarEntrada(req, res, next) {
-    const {id_cliente, valor_entrada,tipo_pagamento, tipo_entrada} = req.body
-    const id_usuario = req.session.usuario.usuario.id_usuario
+    console.log(req.body);
+    const { id_cliente, valor_entrada, tipo_pagamento, tipo_transacao } =
+      req.body;
+    const id_usuario = req.session.usuario.usuario.id_usuario;
     const data = new Date();
     const data_entrada = format(data, "dd/MM/yyyy HH:mm:ss");
-    try{
-      const dados_entrada = {id_usuario, id_cliente,valor_entrada,data_entrada,tipo_entrada, tipo_pagamento}
-      await EntradaDAO.create(dados_entrada)
+    try {
+      const dados_entrada = {
+        id_usuario,
+        id_cliente,
+        valor_entrada,
+        data_entrada,
+        tipo_entrada: tipo_transacao,
+        tipo_pagamento,
+      };
+      await EntradaDAO.create(dados_entrada);
 
-      next()
-
-    }catch(error){
-      console.log(error)
+      next();
+    } catch (error) {
+      console.log(error);
     }
-    
-
   }
 
   async telaProcEntrada(req, res) {
@@ -56,19 +62,19 @@ class EntradaController {
     }
   }
 
-  a
+  a;
 
   async atualizarEntrada(req, res) {
     const Entrada = req.body;
     const EntradaId = req.params.id;
-    
-    try{
-      await EntradaDAO.atualizarEntrada(Entrada, EntradaId);
-    console.log("atualizado");
 
-    res.render("cliente/telaBuscarClientes.ejs")
-    }catch(err){
-      console.log(err)
+    try {
+      await EntradaDAO.atualizarEntrada(Entrada, EntradaId);
+      console.log("atualizado");
+
+      res.render("cliente/telaBuscarClientes.ejs");
+    } catch (err) {
+      console.log(err);
     }
     //ir para qual tela depois de atualizar?
   }
@@ -102,6 +108,15 @@ class EntradaController {
     return res
       .status(500)
       .json({ error: "An error occurred while deleting the Entrada" });
+  }
+  async buscarEntrada(req, res) {
+    const id_entrada = req.params.id;
+    try {
+      const entrada = await EntradaDAO.findById(id_entrada);
+      res.json(entrada);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 

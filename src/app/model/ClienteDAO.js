@@ -100,6 +100,26 @@ class ClienteDAO {
       return result[0];
     }
   }
+  async findByIdComContaCaixa(id) {
+    const sql = `SELECT 
+        c.*,
+        cc.* 
+      FROM
+      tbl_clientes c
+      JOIN 
+        tbl_contas_caixa cc ON c.id_cliente = cc.id_cliente
+        WHERE c.id_cliente = ?`;
+    const result = await consulta(
+      sql,
+      [id],
+      `Não conseguimos encontrar o cliente de id: ${id}`
+    );
+    if (result.length === 0) {
+      throw new Error("Id inválido");
+    } else {
+      return result[0];
+    }
+  }
 
 
 

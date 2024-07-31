@@ -27,5 +27,23 @@ class DepositoDAO {
       return result[0];
     }
   }
+
+  async findHistorico() {
+    const sql = `SELECT 
+        tbl_depositos.id_deposito,
+        tbl_clientes.nome_cliente,
+        COALESCE(tbl_contas_caixa.numero_agencia, '--') AS numero_agencia,
+        COALESCE(tbl_contas_caixa.numero_conta, '--') AS numero_conta,
+        tbl_depositos.valor_deposito,
+        tbl_depositos.data_deposito
+    FROM 
+        tbl_depositos
+    JOIN 
+        tbl_clientes ON tbl_depositos.id_cliente = tbl_clientes.id_cliente
+    LEFT JOIN 
+        tbl_contas_caixa ON tbl_depositos.id_cliente = tbl_contas_caixa.id_cliente;` ;
+    return await consulta(sql, "Histórico impossível de ser recuperado");
+  }
+
 }
 export default new DepositoDAO();

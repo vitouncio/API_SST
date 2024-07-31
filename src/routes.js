@@ -10,7 +10,8 @@ import EntradaController from "./app/controllers/EntradaController.js"
 import ContaCaixaController from "./app/controllers/ContaCaixaController.js";
 import SaidaController from "./app/controllers/SaidaController.js";
 import TransacaoController from "./app/controllers/TransacaoController.js";
-
+import SaqueController from "./app/controllers/SaqueController.js";
+import ExtratoController from "./app/controllers/ExtratoController.js";
 const router = Router();
 
 //LOGIN
@@ -35,6 +36,7 @@ router.get("/perfilCliente/:id", ClienteController.telaPerfilCliente);
 router.get("/telaBuscarClientes", ClienteController.telaBuscarClientes);
 router.get("/buscarClientes", ClienteController.buscarClientes);
 router.get("/buscarClientesComContaCaixa", ClienteController.buscarClientesComContaCaixa);
+router.get("/buscarDetalhesCliente/:id", ClienteController.buscarClientesComContaCaixa);
 router.get("/telaEditarCliente/:id", ClienteController.telaEditarCliente);
 router.post("/cadastrarCliente", ClienteController.cadastrarCliente);
 router.put("/atualizarCliente/:id/:idEnd", ClienteController.atualizarCliente);
@@ -56,6 +58,8 @@ router.put("/atualizarFuncionario/:id", FuncionarioController.atualizarFuncionar
 router.delete("/deletarFuncionario/:id", FuncionarioController.deletarFuncionario);
 
 
+//------------------ SERVIÇOS -----------------------
+
 //MALOTE
 router.get("/telaCadMalote/:id", MaloteController.telaCadastroMalote)
 router.post(
@@ -69,13 +73,37 @@ router.post(
   router.post("/processarMalote/:id", ContaController.cadastrarContas, MaloteController.processarMalote )
   
 //DEPOSITOS
+router.get("/telaDeposito", DepositoController.telaDeposito)
+router.get("/telaDeposito/:id_deposito", DepositoController.telaDeposito)
 router.get("/telaCadDeposito", DepositoController.telaCadastroDeposito)
-router.post("/confirmacaoDeposito",ContaCaixaController.cadastrarContaCaixa,EntradaController.registrarEntrada, DepositoController.cadastrarDeposito);
+router.get("/buscarHistoricoDeDepositos", DepositoController.buscarHistoricoDeDepositos)
+router.post("/confirmacaoDeposito", DepositoController.telaConfirmarDeposito); 
+//CONSULTAS DEPOSITOS
+router.get("/buscarOrigemDeposito/:id", DepositoController.buscarDeposito)
+
+//ENTRADAS
+//CONSULTAS ENTRADAS
+router.get("/buscarOrigemEntrada/:id", EntradaController.buscarEntrada)
 
 //TRANSACOES
-router.post("/confirmarTransacao", SaidaController.registrarSaidaDeposito, SaidaController.registrarSaidaTroco, TransacaoController.registrarTransacao);
+router.post("/confirmarTransacaoDeposito",EntradaController.registrarEntrada, DepositoController.cadastrarDeposito, SaidaController.registrarSaidaDeposito, SaidaController.registrarSaidaTroco, TransacaoController.registrarTransacao);
+//CONSULTAS TRANSACOES
+router.get("/buscarOrigemTransacaoDeposito/:id", TransacaoController.buscarTransacao)
+router.get("/buscarOrigemTransacaoTroco/:id", TransacaoController.buscarTransacao)
+
+//CONTAS
+router.get("/telaRecebimentoDeConta", ContaController.telaRecebimentoDeConta)
+
+//SAQUE
+router.get("/telaSaque", SaqueController.telaSaque)
+router.get("/telaCadSaque", SaqueController.telaCadSaque)
+router.get("/buscarHistoricoDeSaques", SaqueController.buscarHistoricoDeSaques)
+router.post("/telaConfirmacaoDeSaque", SaqueController.telaConfirmacaoDeSaque)
+router.post("/confirmarSaque", SaqueController.registrarSaque, SaidaController.registrarSaida)
 
 
-
+//EXTRATO
+router.get("/telaExtrato", ExtratoController.telaExtrato)
+router.get("/buscarHistoricoExtratos", ExtratoController.buscarHistoricoExtratos);
 
 export default router;

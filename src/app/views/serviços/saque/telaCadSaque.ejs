@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saque</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .tabs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .tab-button {
+      background-color: #5df76a;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    .tab-button.active {
+      background-color: #13a106;
+    }
+    .tab-button:hover {
+      background-color: #13a106;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    button[type="submit"] {
+      background-color: #15db03;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    button[type="submit"]:hover {
+      background-color: #13a106;
+    }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0, 0, 0);
+      background-color: rgba(0, 0, 0, 0.4);
+      padding-top: 60px;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    #tabelaClientes {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    #tabelaClientes,
+    #tabelaClientes th,
+    #tabelaClientes td {
+      border: 1px solid #ddd;
+    }
+    #tabelaClientes th,
+    #tabelaClientes td {
+      padding: 12px;
+      text-align: left;
+    }
+    #tabelaClientes th {
+      background-color: #08e401;
+      color: #fff;
+    }
+    #tabelaClientes tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    #tabelaClientes tr:hover {
+      background-color: #e9ecef;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/homeUsuario">
+      <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
+  </a>
+    <h2>Saque</h2>
+    <div class="tabs">
+      <button class="tab-button active" data-tab="cliente">Cliente</button>
+      <button class="tab-button" data-tab="avulso">Avulso</button>
+    </div>
+    <div class="tab-content active" id="cliente">
+      <form id="saqueFormCliente" action="/telaConfirmacaoDeSaque" method="POST">
+        <div class="form-group">
+          <label for="buscarCliente">Buscar Cliente:</label>
+          <input type="text" name="id_cliente" id="id_cliente" placeholder="ID: --" readonly />
+          <input type="hidden" name="tipo_cliente" id="tipo_cliente" />
+          <br /><br />
+          <input type="text" name="nome_cliente" id="nome_cliente" readonly />
+          <br /><br />
+          <button type="button" id="abrirModal">Buscar</button>
+        </div>
+        <div class="form-group">
+          <label for="agenciaCliente">Agência do Cliente:</label>
+          <input type="text" name="numero_agencia" id="agenciaCliente" />
+        </div>
+        <div class="form-group">
+          <label for="contaCliente">Conta Caixa do Cliente:</label>
+          <input type="text" name="numero_conta" id="contaCliente" />
+        </div>
+        <div class="form-group">
+          <label for="valorSaqueCliente">Valor:</label>
+          <input type="number" id="valorSaqueCliente" name="valor_saque" step="0.01" min="0" placeholder="0.00" />
+        </div>
+        <button type="submit">Sacar</button>
+      </form>
+    </div>
+    <div class="tab-content" id="avulso">
+      <form id="saqueFormAvulso" action="/telaConfirmacaoDeSaque" method="POST">
+        <input type="hidden" name="id_cliente" value="-1" />
+        <input type="hidden" name="nome_cliente" value="Cliente Avulso" />
+        <div class="form-group">
+          <label for="agenciaAvulso">Agência do Cliente:</label>
+          <input type="text" name="numero_agencia" id="agenciaAvulso" />
+        </div>
+        <div class="form-group">
+          <label for="contaAvulso">Conta Caixa do Cliente:</label>
+          <input type="text" name="numero_conta" id="contaAvulso" />
+        </div>
+        <div class="form-group">
+          <label for="valorSaqueAvulso">Valor do saque:</label>
+          <input type="number" name="valor_saque" id="valor" />
+        </div>
+        
+        <button type="submit">Sacar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal de busca de clientes -->
+  <div id="modalClientes" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Selecione um Cliente</h2>
+      <table id="tabelaClientes">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Agência</th>
+            <th>Conta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Clientes serão inseridos aqui via JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Adicionando biblioteca jQuery Mask Plugin -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $("#contaCliente").mask("00000000-0");
+      $("#agenciaCliente").mask("0000");
+      $("#agenciaAvulso").mask("0000");
+      $("#contaAvulso").mask("00000000-0");
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const btnAbrirModal = document.getElementById("abrirModal");
+      const tabelaClientesBody = document.querySelector("#tabelaClientes tbody");
+      const modalClientes = document.getElementById("modalClientes");
+      const spanClose = document.getElementsByClassName("close")[0];
+
+      btnAbrirModal.addEventListener("click", function () {
+        fetch("/buscarClientesComContaCaixa") // URL do seu endpoint que retorna a lista de clientes
+          .then((response) => response.json())
+          .then((clientes) => {
+            tabelaClientesBody.innerHTML = "";
+            clientes.forEach((cliente) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${cliente.id_cliente}</td>
+                <td>${cliente.nome_cliente}</td>
+                <td>${cliente.email_cliente}</td>
+                <td>${cliente.numero_agencia}</td>
+                <td>${cliente.numero_conta}</td>
+              `;
+              row.addEventListener("dblclick", function () {
+                document.getElementById("id_cliente").value = cliente.id_cliente;
+                document.getElementById("nome_cliente").value = cliente.nome_cliente;
+                document.getElementById("agenciaCliente").value = cliente.numero_agencia;
+                document.getElementById("contaCliente").value = cliente.numero_conta;
+                modalClientes.style.display = "none";
+              });
+              tabelaClientesBody.appendChild(row);
+            });
+            modalClientes.style.display = "block";
+          })
+          .catch((error) => console.error("Erro ao buscar clientes:", error));
+      });
+
+      spanClose.addEventListener("click", function () {
+        modalClientes.style.display = "none";
+      });
+
+      window.addEventListener("click", function (event) {
+        if (event.target == modalClientes) {
+          modalClientes.style.display = "none";
+        }
+      });
+
+      const tabButtons = document.querySelectorAll(".tab-button");
+      const tabContents = document.querySelectorAll(".tab-content");
+
+      tabButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          tabButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+
+          const tab = button.getAttribute("data-tab");
+          tabContents.forEach((content) => {
+            content.classList.remove("active");
+            if (content.getAttribute("id") === tab) {
+              content.classList.add("active");
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

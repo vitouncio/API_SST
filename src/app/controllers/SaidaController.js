@@ -16,23 +16,22 @@ class SaidaController {
   //FAÇO TABELA GUICHE??
   //const id_guiche = ??????
   async registrarSaidaTroco(req, res, next) {
-    console.log(req.body);
-    const { id_cliente, tipo_saida, tipo_pagamento_saida, troco } = req.body;
+    let { id_cliente, tipo_pagamento_troco, troco } = req.body;
     const id_usuario = req.session.usuario.usuario.id_usuario;
     const data = new Date();
     const data_saida = format(data, "dd/MM/yyyy HH:mm:ss");
     try {
       if (troco > 0) {
-        console.log("tem troco irmão")
+       let tipo_transacao = "Troco"
         const dados_saida = {
           id_usuario,
           id_cliente,
-          valor: troco,
+          valor_saida: troco,
           data_saida,
-          tipo_saida,
-          tipo_pagamento_saida
+          tipo_saida: tipo_transacao,
+          tipo_pagamento_saida: tipo_pagamento_troco
         };
-        const result = await SaidaDAO.create(dados_saida);
+        const result = await SaidaDAO.registrarSaida(dados_saida);
         req.body.id_saida = result.insertId
       }
       next()
@@ -41,32 +40,45 @@ class SaidaController {
     }
   }
   async registrarSaidaDeposito(req, res, next) {
-    console.log(req.body);
-    const { id_cliente, troco ,tipo_pagamento_saida_deposito} = req.body;
-    const tipo_saida = "Depósito"
+    const { id_cliente, valor ,tipo_pagamento} = req.body;
+    let tipo_saida = "Depósito"
     const id_usuario = req.session.usuario.usuario.id_usuario;
     const data = new Date();
     const data_saida = format(data, "dd/MM/yyyy HH:mm:ss");
     try {
-      if (troco > 0) {
-        console.log("tem troco irmão")
         const dados_saida = {
           id_usuario,
           id_cliente,
-          valor: troco,
+          valor_saida: valor,
           data_saida,
           tipo_saida,
-          tipo_pagamento_saida: tipo_pagamento_saida_deposito
+          tipo_pagamento_saida: tipo_pagamento
         };
-        const result = await SaidaDAO.create(dados_saida);
+        const result = await SaidaDAO.registrarSaida(dados_saida);
         req.body.id_saida = result.insertId
-      }
+      
       req.body.tipo_transacao = tipo_saida
       next()
     } catch (error) {
       console.log(error);
     }
   }
+
+  async registrarSaida(req,res,next){
+    const {id_cliente, valor, tipo, tipo_pagamento} = req.body
+    const id_usuario = req.session.usuario.usuario.id_usuario
+    const data = new Date();
+    const dataFormatada = format(data, "dd/MM/yyyy HH:mm:ss");
+    try{
+      const dados_saida = {id_usuario, id_cliente, valor, data_saida: dataFormatada, tipo_saida: tipo, tipo_pagamento_saida: tipo_pagamento }
+      await SaidaDAO.registrarSaida(dados_saida)
+
+      res.redirect("/homeUsuario");
+    }catch(err){
+      console.log(err)
+    }
+  }
+
 
   async telaProcSaida(req, res) {
     const id_malote = req.params.id;
