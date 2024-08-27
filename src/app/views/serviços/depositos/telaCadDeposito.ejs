@@ -10,7 +10,7 @@
 
       <a href="/homeUsuario">
         <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
-    </a>
+      </a>
       <h2>Depósitos</h2>
       <div class="tabs">
         <button class="tab-button active" data-tab="cliente">Cliente</button>
@@ -115,7 +115,6 @@
               id="valorEntrada"
             />
           </div>
-          
           <div class="form-group">
             <label for="tipoDepositoCliente">Tipo de Depósito:</label>
             <select id="tipoDepositoCliente" name="tipo_pagamento">
@@ -131,6 +130,18 @@
           <button type="submit">Depositar</button>
         </form>
       </div>
+
+      <!-- Filtro por data -->
+      <div class="form-group">
+        <label for="dataFiltro">Filtrar por Data:</label>
+        <input type="date" id="dataFiltro" />
+        <button id="filtrarData">Filtrar</button>
+      </div>
+
+      <div id="resultadosDepositos">
+        <!-- Aqui será inserida a lista de depósitos filtrados -->
+      </div>
+
     </div>
 
     <!-- Modal de busca de clientes -->
@@ -228,182 +239,86 @@
             modalClientes.style.display = "none";
           }
         });
+
+        // Simulação de dados de depósitos
+        const depositos = [
+          { id: 1, nome: "Cliente A", valor: 100.00, data: "2024-08-10" },
+          { id: 2, nome: "Cliente B", valor: 150.00, data: "2024-08-12" },
+          { id: 3, nome: "Cliente C", valor: 200.00, data: "2024-08-09" }
+        ];
+
+        function loadDepositos(filteredDepositos) {
+          const resultadosDepositos = document.getElementById(
+            "resultadosDepositos"
+          );
+          resultadosDepositos.innerHTML = "<h3>Lista de Depósitos</h3>";
+
+          if (filteredDepositos.length === 0) {
+            resultadosDepositos.innerHTML += "<p>Nenhum depósito encontrado.</p>";
+            return;
+          }
+
+          const table = document.createElement("table");
+          const thead = document.createElement("thead");
+          const tbody = document.createElement("tbody");
+
+          const headerRow = document.createElement("tr");
+          ["ID", "Nome", "Valor", "Data"].forEach((text) => {
+            const th = document.createElement("th");
+            th.textContent = text;
+            headerRow.appendChild(th);
+          });
+
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+
+          filteredDepositos.forEach((dep) => {
+            const tr = document.createElement("tr");
+
+            const tdId = document.createElement("td");
+            tdId.textContent = dep.id;
+
+            const tdNome = document.createElement("td");
+            tdNome.textContent = dep.nome;
+
+            const tdValor = document.createElement("td");
+            tdValor.textContent = dep.valor.toFixed(2);
+
+            const tdData = document.createElement("td");
+            tdData.textContent = dep.data;
+
+            tr.appendChild(tdId);
+            tr.appendChild(tdNome);
+            tr.appendChild(tdValor);
+            tr.appendChild(tdData);
+
+            tbody.appendChild(tr);
+          });
+
+          table.appendChild(tbody);
+          resultadosDepositos.appendChild(table);
+        }
+
+        loadDepositos(depositos);
+
+        document
+          .getElementById("filtrarData")
+          .addEventListener("click", function () {
+            const dataFiltro = document.getElementById("dataFiltro").value;
+            const filteredDepositos = depositos.filter(
+              (dep) => dep.data === dataFiltro
+            );
+            loadDepositos(filteredDepositos);
+          });
+
+        document
+          .getElementById("sortBtn")
+          .addEventListener("click", function () {
+            depositos.sort((a, b) => new Date(b.data) - new Date(a.data));
+            loadDepositos(depositos);
+          });
       });
-
-      // Tab functionality
-      const tabs = document.querySelectorAll(".tab-button");
-      const contents = document.querySelectorAll(".tab-content");
-
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          tabs.forEach((item) => item.classList.remove("active"));
-          tab.classList.add("active");
-
-          contents.forEach((content) => content.classList.remove("active"));
-          document.getElementById(tab.dataset.tab).classList.add("active");
-        });
-      });
-
-      // Troco calculation
-      document
-        .getElementById("depositoFormCliente")
-        .addEventListener("submit", function (event) {
-          const valorDeposito = parseFloat(
-            document.getElementById("valorDepositoCliente").value
-          );
-          const valorEntrada = parseFloat(
-            document.getElementById("valorEntradaCliente").value
-          );
-          const troco = valorEntrada - valorDeposito;
-          document.getElementById("trocoCliente").value = troco.toFixed(2);
-        });
-
-      document
-        .getElementById("depositoFormAvulso")
-        .addEventListener("submit", function (event) {
-          const valorDeposito = parseFloat(
-            document.getElementById("valorDepositoAvulso").value
-          );
-          const valorEntrada = parseFloat(
-            document.getElementById("valorEntradaAvulso").value
-          );
-          const troco = valorEntrada - valorDeposito;
-          document.getElementById("trocoAvulso").value = troco.toFixed(2);
-        });
     </script>
   </body>
 </html>
-<style>
-  body {
-    font-family: "Arial", sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .container {
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-  }
-  .tabs {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .tab-button {
-    background-color: #5df76a;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-  }
-  .tab-button.active {
-    background-color: #13a106;
-  }
-  .tab-button:hover {
-    background-color: #13a106;
-  }
-  .tab-content {
-    display: none;
-  }
-  .tab-content.active {
-    display: block;
-  }
-  .form-group {
-    margin-bottom: 20px;
-  }
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-  }
-  button[type="submit"] {
-    background-color: #15db03;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-  }
-  button[type="submit"]:hover {
-    background-color: #13a106;
-  }
-  /* Modal */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4);
-    padding-top: 60px;
-  }
-  .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px;
-    border-radius: 8px;
-  }
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  #tabelaClientes {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  #tabelaClientes,
-  #tabelaClientes th,
-  #tabelaClientes td {
-    border: 1px solid #ddd;
-  }
-  #tabelaClientes th,
-  #tabelaClientes td {
-    padding: 12px;
-    text-align: left;
-  }
-  #tabelaClientes th {
-    background-color: #08e401;
-    color: #fff;
-  }
-  #tabelaClientes tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  #tabelaClientes tr:hover {
-    background-color: #e9ecef;
-  }
-</style>
+
