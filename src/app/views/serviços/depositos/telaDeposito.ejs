@@ -4,6 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Depósitos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #e9ecef;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #08e401;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e9ecef;
+        }
+        button {
+            background-color: #15db03;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #13a106;
+        }
+        .btn-secondary {
+            background-color: #d9534f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+        .btn-secondary:hover {
+            background-color: #c9302c;
+        }
+
+        /* Estilos do Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+            max-width: 600px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .modal-body {
+            padding: 20px 0;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        .modal-footer button {
+            margin-left: 10px;
+        }
+        .modal-body table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .modal-body table, .modal-body th, .modal-body td {
+            border: none;
+            padding: 8px;
+            text-align: left;
+        }
+        .modal-body th {
+            background-color: #489431;
+            font-weight: bold;
+            color: #fff;
+        }
+        .modal-body td {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -35,23 +165,66 @@
     </div>
 
     <!-- Modal para exibir detalhes do cliente -->
-    <div id="detalhesModal" style="display: none;">
-        <div id="detalhesConteudo">
-            <!-- Conteúdo será preenchido via JavaScript -->
+    <div id="detalhesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Detalhes do Depósito</h2>
+                <span id="fecharModal" style="cursor:pointer;">&times;</span>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <td id="id_deposito"></td>
+                    </tr>
+                    <tr>
+                        <th>Nome do Cliente</th>
+                        <td id="nome_cliente"></td>
+                    </tr>
+                    <tr>
+                        <th>Agência</th>
+                        <td id="numero_agencia"></td>
+                    </tr>
+                    <tr>
+                        <th>Conta</th>
+                        <td id="numero_conta"></td>
+                    </tr>
+                    <tr>
+                        <th>Valor</th>
+                        <td id="valor_deposito"></td>
+                    </tr>
+                    <tr>
+                        <th>Data</th>
+                        <td id="data_deposito"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="btnIrParaPerfil" class="btn-primary">Ir para Perfil</button>
+                <button id="fecharModal" class="btn-secondary">Fechar</button>
+            </div>
         </div>
-        <button id="fecharModal">Fechar</button>
-        <button id="btnIrParaPerfil">Ir para Perfil</button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Função para formatar a data
+            function formatarData(data) {
+                const partes = data.split('/');
+                return new Date(partes[2], partes[1] - 1, partes[0]);
+            }
+
             // Função para buscar histórico de depósitos
             function buscarHistoricoDepositos() {
                 $.ajax({
                     url: '/buscarHistoricoDeDepositos',
                     method: 'GET',
                     success: function(data) {
+                        console.log(data);
+
+                        data.sort((a, b) => formatarData(b.data_deposito) - formatarData(a.data_deposito));
+
                         const tabelaBody = $('#tabelaHistoricoDepositos tbody');
                         tabelaBody.empty();
                         data.forEach(deposito => {
@@ -63,155 +236,64 @@
                                     <td>${deposito.numero_conta}</td>
                                     <td>${deposito.valor_deposito}</td>
                                     <td>${deposito.data_deposito}</td>
-                                    <td><button class="detalhes-btn" data-id="${deposito.id_cliente}">Ver Detalhes</button></td>
+                                    <td><button class="detalhes-btn" data-id="${deposito.id_deposito}">Ver Detalhes</button></td>
                                 </tr>
                             `);
                         });
                     },
-                    error: function(error) {
-                        console.error('Erro ao buscar histórico de depósitos:', error);
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Erro ao buscar histórico de depósitos:', textStatus, errorThrown);
                     }
                 });
             }
 
-            // Carregar histórico de depósitos ao carregar a página
-            buscarHistoricoDepositos();
+            // Mostrar modal de detalhes
+            function mostrarModal(id) {
+                $.ajax({
+                    url: `/buscarOrigemDeposito/${id}`,
+                    method: 'GET',
+                    success: function(data) {
+                        $('#id_deposito').text(data.id_deposito);
+                        $('#nome_cliente').text(data.nome_cliente);
+                        $('#numero_agencia').text(data.numero_agencia);
+                        $('#numero_conta').text(data.numero_conta);
+                        $('#valor_deposito').text(data.valor_deposito);
+                        $('#data_deposito').text(data.data_deposito);
+                        $('#detalhesModal').show();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Erro ao buscar detalhes do depósito:', textStatus, errorThrown);
+                    }
+                });
+            }
 
-            // Redirecionar para a tela de cadastro de depósito
-            $('#btnCadastrarDeposito').click(function() {
+            // Fechar modal
+            function fecharModal() {
+                $('#detalhesModal').hide();
+            }
+
+            // Eventos
+            $('#btnCadastrarDeposito').on('click', function() {
                 window.location.href = '/telaCadDeposito';
             });
 
-            // Função para buscar detalhes do cliente
-            function buscarDetalhesCliente(id_cliente) {
-                $.ajax({
-                    url: `/buscarDetalhesCliente/${id_cliente}`,
-                    method: 'GET',
-                    success: function(data) {
-                        let conteudoHtml = `
-                            <tr><th>ID Cliente</th><td id="id_clienteRec">${data[0].id_cliente || ''}</td></tr>
-                            <tr><th>Nome</th><td>${data[0].nome_cliente || ''}</td></tr>
-                            <tr><th>Email</th><td>${data[0].email_cliente || ''}</td></tr>
-                            <tr><th>Telefone</th><td>${data[0].telefone_cliente || ''}</td></tr>
-                            <tr><th>CPF/CNPJ</th><td>${data[0].cpf_cnpj || ''}</td></tr>
-                            <tr><th>Número Agência</th><td>${data[0].numero_agencia || ''}</td></tr>
-                            <tr><th>Número Conta</th><td>${data[0].numero_conta || ''}</td></tr>
-                        `;
-                        $('#detalhesConteudo').html(conteudoHtml);
-                        $('#detalhesModal').show();
-                    },
-                    error: function(error) {
-                        console.error('Erro ao buscar detalhes do cliente:', error);
-                    }
-                });
-            }
-
-            // Exibir modal com detalhes do cliente ao clicar no botão Ver Detalhes
             $(document).on('click', '.detalhes-btn', function() {
-                const id_cliente = $(this).data('id');
-                buscarDetalhesCliente(id_cliente);
+                const id = $(this).data('id');
+                mostrarModal(id);
             });
 
-            // Fechar modal ao clicar no botão Fechar
-            $('#fecharModal').on('click', function() {
-                $('#detalhesModal').hide();
+            $('#fecharModal').on('click', fecharModal);
+
+            $('#btnIrParaPerfil').on('click', function() {
+                const id = $('#id_deposito').text();
+                window.location.href = `/perfilCliente/${id}`;
             });
 
-            // Redirecionar para o perfil do cliente ao clicar no botão Ir para Perfil
-            $('#btnIrParaPerfil').click(function() {
-                const id_cliente = $('#id_clienteRec').text();
-                window.location.href = `/perfilCliente/${id_cliente}`;
-            });
+            // Carregar histórico ao iniciar a página
+            buscarHistoricoDepositos();
         });
     </script>
 </body>
 </html>
 
-<style>
-    body {
-        font-family: "Arial", sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-        color: #333;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-    .container {
-        width: 100%;
-        max-width: 1200px;
-        margin-top: 20px;
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    table, th, td {
-        border: 1px solid #ddd;
-    }
-    th, td {
-        padding: 12px;
-        text-align: left;
-    }
-    th {
-        background-color: #08e401;
-        color: #fff;
-    }
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-    tr:hover {
-        background-color: #e9ecef;
-    }
-    button {
-        background-color: #15db03;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background-color 0.3s;
-    }
-    button:hover {
-        background-color: #13a106;
-    }
-    #detalhesModal {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #fff;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        display: none;
-    }
-    #detalhesConteudo table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    #detalhesConteudo th, #detalhesConteudo td {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-    #fecharModal, #btnIrParaPerfil {
-        background-color: #d9534f;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background-color 0.3s;
-    }
-    #fecharModal:hover, #btnIrParaPerfil:hover {
-        background-color: #c9302c;
-    }
-</style>
+

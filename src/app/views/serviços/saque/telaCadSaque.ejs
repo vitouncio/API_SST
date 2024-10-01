@@ -137,13 +137,39 @@
     #tabelaClientes tr:hover {
       background-color: #e9ecef;
     }
+    .btn-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #f44336; /* Cor de fundo vermelha */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Deixa o botão redondo */
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-back:hover {
+  background-color: #d32f2f; /* Cor de fundo vermelha mais escura ao passar o mouse */
+}
   </style>
 </head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <body>
+  <button class="btn-back" onclick="window.location.href='/telaSaque'">
+    <i class="fas fa-arrow-left"></i>
+  </button>
   <div class="container">
     <a href="/homeUsuario">
       <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
   </a>
+  
     <h2>Saque</h2>
     <div class="tabs">
       <button class="tab-button active" data-tab="cliente">Cliente</button>
@@ -170,7 +196,8 @@
         </div>
         <div class="form-group">
           <label for="valorSaqueCliente">Valor:</label>
-          <input type="number" id="valorSaqueCliente" name="valor_saque" step="0.01" min="0" placeholder="0.00" />
+          <input type="text" id="valorSaqueCliente" name="valor_saque" step="0.01" min="0" placeholder="R$ 0,00"
+          class="currency" required/>
         </div>
         <button type="submit">Sacar</button>
       </form>
@@ -189,8 +216,7 @@
         </div>
         <div class="form-group">
           <label for="valorSaqueAvulso">Valor do saque:</label>
-          <input type="number" name="valor_saque" id="valor" />
-        </div>
+          <input type="text" id="valorSaqueCliente" name="valor_saque" step="0.01" min="0" placeholder="R$ 0,00" required>        </div>
         
         <button type="submit">Sacar</button>
       </form>
@@ -227,8 +253,19 @@
       $("#agenciaCliente").mask("0000");
       $("#agenciaAvulso").mask("0000");
       $("#contaAvulso").mask("00000000-0");
+      $('.currency').mask('R$ 00.000,00', { reverse: true });
+      // Adicionando "R$" ao sair do foco nos campos de valor
+      $('#valorSaqueCliente').on('focusout', function () {
+        if (!$(this).val().startsWith('R$ ')) {
+        $(this).val('R$ ' + $(this).val());
+        //var tmpStr = $(this).val();
+        //$(this).val('');
+       // $(this).val(tmpStr);
+        }else{
+          $(this).val('R$ 0,00');
+        }
+      });
     });
-
     document.addEventListener("DOMContentLoaded", function () {
       const btnAbrirModal = document.getElementById("abrirModal");
       const tabelaClientesBody = document.querySelector("#tabelaClientes tbody");

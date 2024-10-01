@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Remoção de Usuário</title>
+    <title>Clientes</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
@@ -78,13 +78,37 @@
       .btn:hover {
         background-color: #0056b3;
       }
+      .btn-back {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: #f44336; /* Cor de fundo vermelha */
+        color: white;
+        border: none;
+        border-radius: 50%; /* Deixa o botão redondo */
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-back:hover {
+        background-color: #d32f2f; /* Cor de fundo vermelha mais escura ao passar o mouse */
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <a href="/homeUsuario">
-        <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
-    </a>
+        <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon" />
+      </a>
+      <button class="btn-back" onclick="window.location.href='/homeUsuario'">
+        <i class="fas fa-arrow-left"></i>
+      </button>
       <h1>Clientes</h1>
       <table>
         <thead>
@@ -138,35 +162,33 @@
         window.location.href = `/telaEditarCliente/${id}`;
       }
 
-          function confirmDelete(id) {
-            if (confirm("Você tem certeza que deseja remover este usuario?")) {
-              fetch(`/deletarUsuario/${id}`, {
-                method: "DELETE",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              })
-                .then((response) => response.json())
-                .then((data) => {
-                  if (data.error) {
-                    console.error("Error:", data.error);
-                  } else {
-                    console.log("Success:", data.message);
-                    // Remover a linha da tabela
-                    const row = document.getElementById(`client-row-${id}`);
-                    if (row) {
-                      row.remove();
-                    }
-                    window.reload();
-                  }
-                })
-                .catch((error) => {
-                  console.error("Error:", error);
-                });
-            }
-          }
-        
-      
+      function confirmDelete(id) {
+        if (confirm("Você tem certeza que deseja remover este usuario?")) {
+          fetch(`/deletarUsuario/${id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.error) {
+                console.error("Error:", data.error);
+              } else {
+                console.log("Success:", data.message);
+                // Remover a linha da tabela
+                const row = document.getElementById(`client-row-${id}`);
+                if (row) {
+                  row.remove();
+                }
+                window.reload();
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
+      }
 
       function perfilCliente(id) {
         // Redirecionar para a página de perfil do cliente

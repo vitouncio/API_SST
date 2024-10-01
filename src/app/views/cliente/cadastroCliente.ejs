@@ -99,12 +99,51 @@
       .btn:hover {
         background-color: #45a049;
       }
+      .btn-back {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: #f44336; /* Cor de fundo vermelha */
+        color: white;
+        border: none;
+        border-radius: 50%; /* Deixa o botão redondo */
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-back:hover {
+        background-color: #d32f2f; /* Cor de fundo vermelha mais escura ao passar o mouse */
+      }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <script>
+      function validateInputLength(inputId, requiredLength) {
+        const inputElement = document.getElementById(inputId);
+        const inputValue = inputElement.value.replace(/\D/g, ""); // Remove non-digit characters
+
+        if (inputValue.length < requiredLength) {
+          // Display an error message or prevent form submission
+          alert(
+            `Por favor, insira pelo menos ${requiredLength} dígitos em ${inputId}`
+          );
+          // You can add more specific validation logic here
+        } else {
+          // Input length is valid, you can proceed with further actions
+        }
+      }
+
       $(document).ready(function () {
         $("#telefonePF").mask("(00) 00000-0000");
         $("#telefonePJ").mask("(00) 00000-0000");
@@ -153,30 +192,40 @@
             const numero = document.querySelector("#numero");
             const bairro = document.querySelector("#bairro");
             const cidade = document.querySelector("#cidade");
-            const estado = document.querySelector("#estado");
-            cep.value = cep.value.replace(/\-/g, "");
-            cep.value = cep.value.replace(/\./g, "");
+            let n_cep = cep.value
+            n_cep = n_cep.replace(/\-/g, "");
+            n_cep = n_cep.replace(/\./g, "");
             try {
               if (
-                !apenasNumeros.test(cep.value) ||
-                !cepValido.test(cep.value)
+                !apenasNumeros.test(n_cep) ||
+                !cepValido.test(n_cep)
               ) {
                 throw { cep_error: "CEP inválido" };
               }
 
               const response = await fetch(
-                `https://viacep.com.br/ws/${cep.value}/json/`
+                `https://viacep.com.br/ws/${n_cep}/json/`
               );
+
               if (!response.ok) {
-                throw await response.json();
+                alert("opa, esse CEP não é válido");
               }
 
-              const responseCep = await response.json();
-              rua.value = responseCep.logradouro;
-              numero.value = responseCep.complemento;
-              bairro.value = responseCep.bairro;
-              cidade.value = responseCep.localidade;
-              estado.value = responseCep.uf;
+              let responseCep;
+              try {
+                responseCep = await response.json();
+              } catch (error) {
+                console.log("Erro ao obter os dados do CEP:", error);
+              }
+
+              if (responseCep.uf === undefined) {
+                alert("CEP indefinido")
+              } else {
+                rua.value = responseCep.logradouro;
+                numero.value = responseCep.complemento;
+                bairro.value = responseCep.bairro;
+                cidade.value = responseCep.localidade;
+              }
             } catch (error) {
               console.log(error);
             }
@@ -192,32 +241,41 @@
             const numero = document.querySelector("#complementoj");
             const bairro = document.querySelector("#bairroj");
             const cidade = document.querySelector("#cidadej");
-            const estado = document.querySelector("#ufj");
-            cepj.value = cepj.value.replace(/\-/g, "");
-            cepj.value = cepj.value.replace(/\./g, "");
-            console.log(cepj.value)
-
+            let n_cepj = cepj.value
+            n_cepj = n_cepj.replace(/\-/g, "");
+            n_cepj = n_cepj.replace(/\./g, "");
+            console.log(n_cepj)
             try {
               if (
-                !apenasNumeros.test(cepj.value) ||
-                !cepValido.test(cepj.value)
+                !apenasNumeros.test(n_cepj) ||
+                !cepValido.test(n_cepj)
               ) {
                 throw { cep_error: "CEP inválido" };
               }
 
               const response = await fetch(
-                `https://viacep.com.br/ws/${cepj.value}/json/`
+                `https://viacep.com.br/ws/${n_cepj}/json/`
               );
+
               if (!response.ok) {
-                throw await response.json();
+                alert("opa, esse CEP não é válido");
               }
 
-              const responseCep = await response.json();
-              rua.value = responseCep.logradouro;
-              numero.value = responseCep.complemento;
-              bairro.value = responseCep.bairro;
-              cidade.value = responseCep.localidade;
-              estado.value = responseCep.uf;
+              let responseCep;
+              try {
+                responseCep = await response.json();
+              } catch (error) {
+                console.log("Erro ao obter os dados do CEP:", error);
+              }
+
+              if (responseCep.uf === undefined) {
+                alert("CEP indefinido")
+              } else {
+                rua.value = responseCep.logradouro;
+                numero.value = responseCep.complemento;
+                bairro.value = responseCep.bairro;
+                cidade.value = responseCep.localidade;
+              }
             } catch (error) {
               console.log(error);
             }
@@ -226,11 +284,17 @@
     </script>
   </head>
   <body>
+    <button
+      class="btn-back"
+      onclick="window.location.href='/telaBuscarClientes'"
+    >
+      <i class="fas fa-arrow-left"></i>
+    </button>
     <div class="signup-container">
       <header>
         <a href="/homeUsuario">
-          <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
-      </a>
+          <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon" />
+        </a>
       </header>
       <h2>Cadastro de cliente</h2>
 
@@ -268,10 +332,11 @@
           />
           <input
             type="text"
-            id="telefonePF"
+            id="telefone-PF"
             name="telefone_cliente"
             placeholder="Telefone"
             required
+            onfocusout="validateInputLength('telefone-PF', 11)"
           />
           <input
             type="text"
@@ -279,8 +344,16 @@
             name="cpf_cnpj"
             placeholder="CPF"
             required
+            onfocusout="validateInputLength('cpf', 11)"
           />
-          <input type="text" id="cep" name="cep" placeholder="CEP" required />
+          <input
+            type="text"
+            id="cep"
+            name="cep"
+            placeholder="CEP"
+            required
+            onfocusout="validateInputLength('cep', 8)"
+          />
           <div class="form-row">
             <input
               type="text"
@@ -313,13 +386,35 @@
               required
             />
           </div>
-          <input
-            type="text"
-            id="estado"
-            name="uf"
-            placeholder="Estado"
-            required
-          />
+          <select id="uf" name="uf">
+            <option value="AC">Acre (AC)</option>
+            <option value="AL">Alagoas (AL)</option>
+            <option value="AP">Amapá (AP)</option>
+            <option value="AM">Amazonas (AM)</option>
+            <option value="BA">Bahia (BA)</option>
+            <option value="CE">Ceará (CE)</option>
+            <option value="DF">Distrito Federal (DF)</option>
+            <option value="ES">Espírito Santo (ES)</option>
+            <option value="GO">Goiás (GO)</option>
+            <option value="MA">Maranhão (MA)</option>
+            <option value="MT">Mato Grosso (MT)</option>
+            <option value="MS">Mato Grosso do Sul (MS)</option>
+            <option value="MG">Minas Gerais (MG)</option>
+            <option value="PA">Pará (PA)</option>
+            <option value="PB">Paraíba (PB)</option>
+            <option value="PR">Paraná (PR)</option>
+            <option value="PE">Pernambuco (PE)</option>
+            <option value="PI">Piauí (PI)</option>
+            <option value="RJ">Rio de Janeiro (RJ)</option>
+            <option value="RN">Rio Grande do Norte (RN)</option>
+            <option value="RS">Rio Grande do Sul (RS)</option>
+            <option value="RO">Rondônia (RO)</option>
+            <option value="RR">Roraima (RR)</option>
+            <option value="SC">Santa Catarina (SC)</option>
+            <option value="SP">São Paulo (SP)</option>
+            <option value="SE">Sergipe (SE)</option>
+            <option value="TO">Tocantins (TO)</option>
+        </select>
           <button type="submit" class="btn">Cadastrar</button>
         </form>
       </div>
@@ -333,6 +428,7 @@
             name="cpf_cnpj"
             placeholder="CNPJ"
             required
+            onfocusout="validateInputLength('cnpj', 11)"
           />
           <input
             type="text"
@@ -351,20 +447,28 @@
 
           <input
             type="text"
-            id="telefonePJ"
-            name="telefone_cliente"
-            placeholder="Telefone"
-            required
-          />
-          <input
-            type="text"
             id="razaoSocial"
             name="razao_social"
             placeholder="Razão Social"
             required
           />
-
-          <input type="text" id="cepj" name="cep" placeholder="CEP" required />
+          <input
+            type="text"
+            id="telefone-PJ"
+            name="telefone_cliente"
+            placeholder="Telefone"
+            required
+            onfocusout="validateInputLength('telefone-PJ', 11)"
+          />
+          
+          <input
+            type="text"
+            id="cepj"
+            name="cep"
+            placeholder="CEP"
+            required
+            onfocusout="validateInputLength('cepj', 8)"
+          />
           <div class="form-row">
             <input
               type="text"
@@ -397,14 +501,36 @@
               required
             />
           </div>
-          <input
-            type="text"
-            id="ufj"
-            name="uf"
-            placeholder="Estado"
-            required
-          />
-          <button type="submit" class="btn">Cadastrar</button>
+<select id="ufj" name="uf">
+            <option value="AC">Acre (AC)</option>
+            <option value="AL">Alagoas (AL)</option>
+            <option value="AP">Amapá (AP)</option>
+            <option value="AM">Amazonas (AM)</option>
+            <option value="BA">Bahia (BA)</option>
+            <option value="CE">Ceará (CE)</option>
+            <option value="DF">Distrito Federal (DF)</option>
+            <option value="ES">Espírito Santo (ES)</option>
+            <option value="GO">Goiás (GO)</option>
+            <option value="MA">Maranhão (MA)</option>
+            <option value="MT">Mato Grosso (MT)</option>
+            <option value="MS">Mato Grosso do Sul (MS)</option>
+            <option value="MG">Minas Gerais (MG)</option>
+            <option value="PA">Pará (PA)</option>
+            <option value="PB">Paraíba (PB)</option>
+            <option value="PR">Paraná (PR)</option>
+            <option value="PE">Pernambuco (PE)</option>
+            <option value="PI">Piauí (PI)</option>
+            <option value="RJ">Rio de Janeiro (RJ)</option>
+            <option value="RN">Rio Grande do Norte (RN)</option>
+            <option value="RS">Rio Grande do Sul (RS)</option>
+            <option value="RO">Rondônia (RO)</option>
+            <option value="RR">Roraima (RR)</option>
+            <option value="SC">Santa Catarina (SC)</option>
+            <option value="SP">São Paulo (SP)</option>
+            <option value="SE">Sergipe (SE)</option>
+            <option value="TO">Tocantins (TO)</option>
+        </select>
+                  <button type="submit" class="btn">Cadastrar</button>
         </form>
       </div>
     </div>

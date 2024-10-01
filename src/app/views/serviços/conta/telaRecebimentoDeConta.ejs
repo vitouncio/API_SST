@@ -3,8 +3,102 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Processamento de Malote</title>
+    <title>Contas</title>
     <style>
+.modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+            max-width: 600px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .modal-body {
+            padding: 20px 0;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        .modal-footer button {
+            margin-left: 10px;
+        }
+        .modal-body table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .modal-body table, .modal-body th, .modal-body td {
+            border: none;
+            padding: 8px;
+            text-align: left;
+        }
+        .modal-body th {
+            background-color: #489431;
+            font-weight: bold;
+            color: #fff;
+        }
+        .modal-body td {
+            background-color: #f2f2f2;
+        }
+
+        /* Estilos adicionais */
+        .home-icon {
+            width: 50px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #08e401;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            th, td {
+                padding: 8px;
+            }
+            button, .btn-secondary {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+        }
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
       body {
         background-color: #f4fdf4; /* Verde claro */
         color: #2c3e50; /* Cinza escuro */
@@ -33,7 +127,7 @@
       }
       .form-group input,
       .form-group select {
-        width: 100%;
+        width:300px;
         padding: 8px;
         box-sizing: border-box;
         border: 1px solid #dfe6e9; /* Cinza claro */
@@ -98,12 +192,52 @@
         margin-left: 5px;
         color: #27ae60; /* Verde escuro */
       }
+      .btn-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #f44336; /* Cor de fundo vermelha */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Deixa o botão redondo */
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-back:hover {
+  background-color: #d32f2f; /* Cor de fundo vermelha mais escura ao passar o mouse */
+}
+#editModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
     </style>
   </head>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  />
   <body>
+    <button class="btn-back" onclick="window.location.href='/homeUsuario'">
+      <i class="fas fa-arrow-left"></i>
+    </button>
     <div class="container">
       <a href="/homeUsuario">
-        <img src="imagens/logo_sollo.jpg" alt="Logo" class="home-icon">
+        <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
     </a>
       <h1>Pagamento de contas</h1>
       
@@ -175,17 +309,30 @@
               <option value="Multa de trânsito">Multa de trânsito</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="codigoBancoManual">Código do Banco:</label>
-            <input type="text" id="codigoBancoManual" />
-          </div>
+            <div class="form-group">
+            <label for="empresa">Empresa:</label>
+            <select id="empresa" name="empresa">
+              <option value="Copasa">Copasa</option>
+              <option value="Energisa">Energisa</option>
+              <option value="Caixa Econômica">Caixa Econômica</option>
+              <option value="Outros">Outros...</option>
+            </select>
+            </div>
+            <div id="outraEmpresaInputContainer" class= "form-group" style="display: none" >
+            <label for="outraEmpresaInput">Informe a empresa:</label>
+            <input type="text" id="outraEmpresaInput" onclick="limpar('outraEmpresaInput')"/>
+            </div>
           <div class="form-group">
             <label for="dataVencimentoManual">Data de Vencimento:</label>
-            <input type="date" id="dataVencimentoManual" />
+            <input type="date" id="dataVencimentoManual" onclick="limpar('dataVencimentoManual')"/>
           </div>
           <div class="form-group">
             <label for="valorManual">Valor:</label>
-            <input type="text" id="valorManual" />
+            <input type="text" id="valorManual" onclick="limpar('valorManual')"/>
+          </div>
+          <div class="form-group">
+            <label for="codigoDeBarras">Código de barras:</label>
+            <input type="text" id="codigoDeBarrasManual" onclick="limpar('codigoDeBarrasManual')"/>
           </div>
           <button id="adicionarPagamentoManualBtn">
             Adicionar Pagamento Manual
@@ -209,13 +356,46 @@
     </div>
     <div class="container payment-list">
       <h2>Pagamentos</h2>
+      <div class="button-group">
+        <!-- Botão para abrir o modal de busca de clientes -->
+        <button id="buscarClienteBtn">Buscar Cliente</button>
+        <!-- Input para exibir o id_cliente selecionado -->
+        <input type="text" id="idCliente" placeholder="ID Cliente" readonly>
+      <br />
+      <br />
+      <br />
+      <div id="clienteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Selecione um Cliente</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <table id="clientesTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Clientes serão carregados aqui -->
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+      </div>
+
       <table>
         <thead>
           <tr>
             <th>Tipo</th>
-            <th>Código do Banco</th>
+            <th>Empresa</th>
             <th>Data de Vencimento</th>
             <th>Valor</th>
+            <th>Código de barras</th>
           </tr>
         </thead>
         <tbody id="paymentTableBody"></tbody>
@@ -230,257 +410,356 @@
       <button id="btnRegistrarPagamentos">Processar malote</button>
     </div>
 
+    <div id="editModal" style="display: none;">
+      <div class="modal-content">
+        <h2>Editar Pagamento</h2>
+        <div class="form-group">
+          <label for="editTipoConta">Tipo de Conta:</label>
+          <input type="text" id="editTipoConta" />
+        </div>
+        <div class="form-group">
+          <label for="editEmpresa">Empresa:</label>
+          <input type="text" id="editEmpresa" />
+        </div>
+        <div class="form-group">
+          <label for="editDataVencimento">Data de Vencimento:</label>
+          <input type="date" id="editDataVencimento" />
+        </div>
+        <div class="form-group">
+          <label for="editValor">Valor:</label>
+          <input type="text" id="editValor" />
+        </div>
+        <div class="form-group">
+          <label for="editCDB">Código de barras:</label>
+          <input type="text" id="editCDB" />
+        </div>
+        <button id="saveEditBtn">Salvar</button>
+        <button onclick="document.getElementById('editModal').style.display='none'">Cancelar</button>
+      </div>
+    </div>
+
     <script>
+       document.getElementById('buscarClienteBtn').addEventListener('click', async () => {
+            // Fetch the list of clients
+            const response = await fetch('/buscarClientes');
+            const clientes = await response.json();
+
+            // Populate the table with clients
+            const clientesTableBody = document.getElementById('clientesTable').querySelector('tbody');
+            clientesTableBody.innerHTML = ''; // Clear previous rows
+            clientes.forEach(cliente => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${cliente.id_cliente}</td>
+                    <td>${cliente.nome_cliente}</td>
+                    <td><button class="select-client-btn" data-id="${cliente.id_cliente}">Selecionar</button></td>
+                `;
+                clientesTableBody.appendChild(row);
+            });
+
+            // Display the modal
+            document.getElementById('clienteModal').style.display = 'block';
+        });
+
+        // Close the modal when the user clicks on <span> (x) or the close button
+        document.querySelectorAll('.close').forEach(element => {
+            element.addEventListener('click', () => {
+                document.getElementById('clienteModal').style.display = 'none';
+            });
+        });
+
+        // Close the modal when the user clicks anywhere outside of the modal
+        window.addEventListener('click', (event) => {
+            if (event.target == document.getElementById('clienteModal')) {
+                document.getElementById('clienteModal').style.display = 'none';
+            }
+        });
+
+        // Set the selected client ID when a client is selected from the table
+        document.getElementById('clientesTable').addEventListener('click', (event) => {
+            if (event.target.classList.contains('select-client-btn')) {
+                const selectedId = event.target.getAttribute('data-id');
+                document.getElementById('idCliente').value = selectedId;
+                // Close the modal after selection
+                document.getElementById('clienteModal').style.display = 'none';
+            }
+        });
+      function limpar(id){
+        document.getElementById(id).value = "";
+      }
       document.addEventListener("DOMContentLoaded", function () {
         // Tabs
         const tabs = document.querySelectorAll(".tab");
         const tabContents = document.querySelectorAll(".tab-content");
-
+    
         tabs.forEach((tab) => {
           tab.addEventListener("click", () => {
             tabs.forEach((t) => t.classList.remove("active"));
             tabContents.forEach((tc) => tc.classList.remove("active"));
-
+    
             tab.classList.add("active");
             document
               .getElementById(tab.getAttribute("data-tab"))
               .classList.add("active");
           });
         });
-
+    
         // Leitura de código de barras
         document
-          .getElementById("btnLerCodigo")
-          .addEventListener("click", function () {
-            const inputContainer = document.getElementById(
-              "codigoBarrasInputContainer"
-            );
-            inputContainer.style.display =
-              inputContainer.style.display === "none" ? "block" : "none";
-          });
+  .getElementById("btnLerCodigo")
+  .addEventListener("click", function () {
+    const inputContainer = document.getElementById("codigoBarrasInputContainer");
+    inputContainer.style.display =
+      inputContainer.style.display === "none" ? "block" : "none";
+  });
 
-        document
-          .getElementById("processarCodigoBtn")
-          .addEventListener("click", function () {
-            let codigoBarras =
-              document.getElementById("codigoBarrasInput").value;
-            codigoBarras = codigoBarras.replace(/\./g, "");
-            let tipoConta, dataVencimento, fatorVencimento, codigoBanco, valor;
+document
+  .getElementById("processarCodigoBtn")
+  .addEventListener("click", function () {
+    let codigoBarras = document.getElementById("codigoBarrasInput").value;
+    codigoBarras = codigoBarras.replace(/\./g, "").replace(/\s/g, "").replace(/-/g, ""); // Remove pontos, espaços e traços
+    console.log(codigoBarras.length);
+    let tipoConta, dataVencimento, fatorVencimento, codigoBanco, valor;
 
-            let troco = document.getElementById("troco").value;
+    // Verifica se o código possui 44 dígitos
+    if (codigoBarras.length === 47) {
+      codigoBanco = codigoBarras.substring(0, 3); // Código do banco
+      const moeda = codigoBarras.substring(3, 4); // Moeda (geralmente 9 = Real)
+      const digitoVerificador = codigoBarras.substring(4, 5); // Dígito verificador do código de barras
+      fatorVencimento = codigoBarras.substring(33, 37); // Fator de vencimento
+      console.log(fatorVencimento);
+      valor = codigoBarras.substring(37, 47); // Valor do boleto
 
-            if (codigoBarras.length === 44) {
-              if (codigoBarras[0] === "8") {
-                if (codigoBarras[1] === "1") {
-                  // Segmento 2 = conta de saneamento
-                  tipoConta = "Prefeitura";
-                } else if (codigoBarras[1] === "2") {
-                  tipoConta = "Saneamento";
-                } else if (codigoBarras[1] === "3") {
-                  tipoConta = "Energia Elétrica/Gás";
-                } else if (codigoBarras[1] === "4") {
-                  tipoConta = "Telecomunicação";
-                } else if (codigoBarras[1] === "5") {
-                  tipoConta = "Órgão governamental";
-                } else if (codigoBarras[1] === "6") {
-                  tipoConta = "Carnê e assemelhados";
-                } else if (codigoBarras[1] === "7") {
-                  tipoConta = "Multas de trânsito";
-                }
+      let valorFormatado = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      }).format(parseInt(valor) / 100);
 
-                valor = parseFloat(codigoBarras.substr(4, 11)); // Valor ocupa 11 dígitos
+      // Calcula a data de vencimento com base no fator de vencimento
+      const dataBase = new Date("1997-10-07");
+      const vencimento = new Date(dataBase);
+      vencimento.setDate(dataBase.getDate() + parseInt(fatorVencimento));
 
-                let valorFormatado = (parseInt(valor) / 100).toFixed(2);
+      // Define o tipo de conta (boleto bancário)
+      tipoConta = "Boleto Bancário";
 
-                // Exibir informações no contêiner para verificação
-                document.getElementById("codigoBanco").value = "--";
-                document.getElementById("tipoConta").value = tipoConta;
-                document.getElementById("dataVencimento").value = "--";
-                document.getElementById("valor").value = valorFormatado;
-                document.getElementById("codigoBarrasInfo").style.display =
-                  "block";
-                let trocof = troco - valorFormatado;
-                document.getElementById("troco").value = trocof.toFixed(2);
-              } else {
-                console.log(codigoBarras);
-                codigoBanco = codigoBarras.substring(0, 3);
-                fatorVencimento = codigoBarras.substring(5, 9);
-                valor = codigoBarras.substring(9, 19);
-                console.log(fatorVencimento);
-                // Formatar o valor
-                let valorFormatado = (parseInt(valor) / 100).toFixed(2);
+      // Preenche os campos do formulário
+      document.getElementById("codigoBanco").value = codigoBanco;
+      document.getElementById("tipoConta").value = tipoConta;
+      document.getElementById("dataVencimento").value =
+        vencimento.toLocaleDateString("pt-br");
+      document.getElementById("valor").value = valorFormatado;
+      document.getElementById("codigoBarrasInfo").style.display = "block";
+    } else {
+      alert("Código de barras inválido. Deve ter 44 dígitos.");
+    }
+  });
 
-                // Converter o fator de vencimento para data
-                const dataBase = new Date("1997-10-07");
-                const vencimento = new Date(dataBase);
-                vencimento.setDate(dataBase.getDate() + fatorVencimento + 1);
-                console.log("passei aq");
-                // Exibir informações no contêiner para verificação
-                document.getElementById("codigoBanco").value = codigoBanco;
-                document.getElementById("tipoConta").value = tipoConta;
-                document.getElementById("dataVencimento").value =
-                  vencimento.toLocaleDateString("pt-br");
-                document.getElementById("valor").value = valorFormatado;
-                document.getElementById("codigoBarrasInfo").style.display =
-                  "block";
-                let trocof = troco - valorFormatado;
-                document.getElementById("troco").value = trocof.toFixed(2);
-              }
-            } else {
-              alert("Código de barras inválido. Deve ter 44 dígitos.");
-            }
-          });
+// Edição do tipo de conta e data de vencimento
+document.getElementById("editar-tipo").addEventListener("click", function () {
+  const tipoConta = document.getElementById("tipoConta");
+  tipoConta.disabled = !tipoConta.disabled;
+  if (!tipoConta.disabled) {
+    tipoConta.focus();
+  }
+});
 
-        // Edição da data de vencimento
-        document
-          .getElementById("editar-tipo")
-          .addEventListener("click", function () {
-            const tipoConta = document.getElementById("tipoConta");
-            if (tipoConta.disabled) {
-              tipoConta.disabled = false;
-              tipoConta.focus();
-            } else {
-              tipoConta.disabled = true;
-            }
-          });
-        document
-          .getElementById("editar-data")
-          .addEventListener("click", function () {
-            const dataVencimentoInput =
-              document.getElementById("dataVencimento");
-            if (dataVencimentoInput.disabled) {
-              dataVencimentoInput.disabled = false;
-              dataVencimentoInput.focus();
-            } else {
-              dataVencimentoInput.disabled = true;
-            }
-          });
+document.getElementById("editar-data").addEventListener("click", function () {
+  const dataVencimentoInput = document.getElementById("dataVencimento");
+  dataVencimentoInput.disabled = !dataVencimentoInput.disabled;
+  if (!dataVencimentoInput.disabled) {
+    dataVencimentoInput.focus();
+  }
+});
 
+           
+        // Formatar valor à medida que o usuário digita
+        document.getElementById("valorManual").addEventListener("input", function (e) {
+          let value = e.target.value;
+          value = value.replace(/\D/g, ""); // Remove tudo que não é dígito
+          value = (value / 100).toFixed(2); // Divide por 100 para obter o valor correto
+          value = value.replace(".", ","); // Substitui ponto por vírgula
+          value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Adiciona pontos a cada 3 dígitos
+          e.target.value = value;
+        });
+        document.getElementById("editValor").addEventListener("input", function (e) {
+          let value = e.target.value;
+          value = value.replace(/\D/g, ""); // Remove tudo que não é dígito
+          value = (value / 100).toFixed(2); // Divide por 100 para obter o valor correto
+          value = value.replace(".", ","); // Substitui ponto por vírgula
+          value = value.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Adiciona pontos a cada 3 dígitos
+          e.target.value = value;
+        });
+    
         // Adicionar pagamento manual
         document
           .getElementById("adicionarPagamentoManualBtn")
           .addEventListener("click", function () {
             const tipoConta = document.getElementById("tipoContaManual").value;
-            const codigoBanco =
-              document.getElementById("codigoBancoManual").value;
-            const dataVencimento = document.getElementById(
-              "dataVencimentoManual"
-            ).value;
+            const empresa = document.getElementById("empresa").value;
+            const outraEmpresa = document.getElementById("outraEmpresaInput").value;
+            const dataVencimento =
+              document.getElementById("dataVencimentoManual").value;
             const valor = document.getElementById("valorManual").value;
-
-            if (tipoConta && codigoBanco && dataVencimento && valor) {
-              adicionarPagamento(tipoConta, codigoBanco, dataVencimento, valor);
+            const codigoDeBarras = document.getElementById("codigoDeBarrasManual").value;
+    
+            const empresaFinal = empresa === "Outros" ? outraEmpresa : empresa;
+    
+            if (tipoConta && empresaFinal && dataVencimento && valor && codigoDeBarras) {
+              const valorFormatado = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+              }).format(parseFloat(valor.replace(/\./g, "").replace(",", ".")));
+              adicionarPagamento(tipoConta, empresaFinal, dataVencimento, valorFormatado, codigoDeBarras);
             } else {
               alert("Preencha todos os campos.");
             }
-          });
 
+          });
+     
         // Adicionar pagamento via PIX
         document
           .getElementById("btnRegistrarPagamentoPix")
           .addEventListener("click", function () {
             const valorPix = document.getElementById("valorPix").value;
-
+    
             if (valorPix) {
-              adicionarPagamento("PIX", "", "", valorPix);
+              const valorFormatado = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+              }).format(parseFloat(valorPix.replace(/\./g, "").replace(",", ".")));
+              adicionarPagamento("PIX", "", "", valorFormatado, "");
             } else {
               alert("Preencha o valor do PIX.");
             }
           });
-
+    
         // Confirmar dados do código de barras
         document
           .getElementById("confirmarDadosBtn")
           .addEventListener("click", function () {
             const tipoConta = document.getElementById("tipoConta").value;
             const codigoBanco = document.getElementById("codigoBanco").value;
-            const dataVencimento =
-              document.getElementById("dataVencimento").value;
+            const dataVencimento = document.getElementById("dataVencimento").value;
             const valor = document.getElementById("valor").value;
+            let codigoBarras = document.getElementById("codigoBarrasInput").value;
 
             if (tipoConta && codigoBanco && dataVencimento && valor) {
-              adicionarPagamento(tipoConta, codigoBanco, dataVencimento, valor);
-              document.getElementById("codigoBarrasInfo").style.display =
-                "none";
+              adicionarPagamento(tipoConta, codigoBanco, dataVencimento, valor, codigoBarras);
+              document.getElementById("codigoBarrasInfo").style.display = "none";
             } else {
               alert("Preencha todos os campos.");
             }
           });
-
+    
         // Função para adicionar pagamento na tabela
-        function adicionarPagamento(
-          tipoConta,
-          codigoBanco,
-          dataVencimento,
-          valor
-        ) {
+        function adicionarPagamento(tipoConta, empresa, dataVencimento, valor, codigoDeBarras) {
           const tableBody = document.getElementById("paymentTableBody");
           const row = document.createElement("tr");
-
+    
           row.innerHTML = `
             <td>${tipoConta}</td>
-            <td>${codigoBanco}</td>
+            <td>${empresa}</td>
             <td>${dataVencimento}</td>
             <td>${valor}</td>
+            <td>${codigoDeBarras}</td>
+            <td><i class="fas fa-edit edit-icon" onclick="editarPagamento(this)"></i></td>
           `;
-
+    
           tableBody.appendChild(row);
         }
+    
+        // Função para editar pagamento
+        window.editarPagamento = function (icon) {
+          const row = icon.closest("tr");
+          const cols = row.querySelectorAll("td");
+    
+          const tipoConta = cols[0].textContent;
+          const empresa = cols[1].textContent;
+          const dataVencimento = cols[2].textContent;
+          const valor = cols[3].textContent;
+          const codigoDeBarras = cols[4].textContent;
+    
+          document.getElementById("editTipoConta").value = tipoConta;
+          document.getElementById("editEmpresa").value = empresa;
+          document.getElementById("editDataVencimento").value = dataVencimento;
+          document.getElementById("editValor").value = valor;
+          document.getElementById("editCDB").value = codigoDeBarras;
+    
+          document.getElementById("editModal").style.display = "block";
+    
+          document.getElementById("saveEditBtn").onclick = function () {
 
+            cols[0].textContent = document.getElementById("editTipoConta").value;
+            cols[1].textContent = document.getElementById("editEmpresa").value;
+            cols[2].textContent = document.getElementById("editDataVencimento").value;
+            cols[3].textContent = document.getElementById("editValor").value;
+            cols[4].textContent = document.getElementById("editCDB").value;
+    
+            document.getElementById("editModal").style.display = "none";
+          };
+        };
+    
         // Registrar pagamentos
         document
           .getElementById("btnRegistrarPagamentos")
           .addEventListener("click", async function () {
             const tableBody = document.getElementById("paymentTableBody");
+            const id_cliente = document.getElementById("idCliente");
             const rows = tableBody.querySelectorAll("tr");
             const pagamentos = [];
-            const troco = document.getElementById("troco").value;
             const observacao = document.getElementById("observacao").value;
-
+    
             rows.forEach((row) => {
               const cols = row.querySelectorAll("td");
               const pagamento = {
                 tipo_conta: cols[0].textContent,
-                codigo_banco: cols[1].textContent,
+                empresa: cols[1].textContent,
                 data_vencimento: cols[2].textContent,
                 valor: cols[3].textContent,
+                codigo_de_barras: cols[4].textContent,
               };
               pagamentos.push(pagamento);
             });
-
+    
             try {
-              const response = await fetch(
-                `/PagarContas`,
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    pagamentos,
-                    troco,
-                    id_cliente,
-                    id_funcionario,
-                    observacao,
-                  }),
-                }
-              );
-
+              const response = await fetch(`/cadastrarContas`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  pagamentos,
+                  id_cliente,
+                  observacao,
+                }),
+              });
+    
               if (response.ok) {
                 const data = await response.json();
                 if (data.success) {
-                    window.location.href = data.redirectUrl; // Redireciona para o perfil do cliente
+                  window.location.href = redirectUrl; // Redireciona para o perfil do cliente
                 } else {
-                    alert("Erro ao registrar pagamentOOOs: " + data.message);
+                  alert("Erro ao registrar pagamentos: " + data.message);
                 }
               } else {
                 const errorData = await response.json();
-                alert("Erro ao registrar pagamentoSSS: " + errorData.message);
+                alert("Erro ao registrar pagamentos: " + errorData.message);
               }
             } catch (error) {
-              alert("Erro ao registrar pagamentossss: " + error.message);
+              alert("Erro ao registrar pagamentos: " + error.message);
             }
           });
+      });
+    
+      // Mostrar campo "Informe a empresa" quando "Outros" for selecionado
+      document.getElementById("empresa").addEventListener("change", function () {
+        const outraEmpresaInputContainer = document.getElementById("outraEmpresaInputContainer");
+        if (this.value === "Outros") {
+          outraEmpresaInputContainer.style.display = "block";
+        } else {
+          outraEmpresaInputContainer.style.display = "none";
+        }
       });
     </script>
   </body>

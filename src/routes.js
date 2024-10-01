@@ -93,13 +93,13 @@ router.get("/buscarOrigemTransacaoTroco/:id", TransacaoController.buscarTransaca
 
 //CONTAS
 router.get("/telaRecebimentoDeConta", ContaController.telaRecebimentoDeConta)
-
+router.post("/cadastrarContas", ContaController.cadastrarContas)
 //SAQUE
 router.get("/telaSaque", SaqueController.telaSaque)
 router.get("/telaCadSaque", SaqueController.telaCadSaque)
 router.get("/buscarHistoricoDeSaques", SaqueController.buscarHistoricoDeSaques)
 router.post("/telaConfirmacaoDeSaque", SaqueController.telaConfirmacaoDeSaque)
-router.post("/confirmarSaque", SaqueController.registrarSaque, SaidaController.registrarSaida)
+router.post("/confirmarSaque", SaqueController.registrarSaque)
 
 
 //EXTRATO

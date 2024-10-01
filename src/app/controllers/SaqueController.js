@@ -37,11 +37,12 @@ class SaqueController {
   
 
   async registrarSaque(req,res,next) {
-    const {id_cliente, valor} = req.body;
+    let {id_cliente, valor} = req.body;
     const id_usuario = req.session.usuario.usuario.id_usuario;
     const data = new Date();
     const dataFormatada = format(data, "dd/MM/yyyy HH:mm:ss");
-
+    valor = valor.replace(/\R\$ /g, "")
+    valor = valor.replace(/\,/g, ".")
     let dados_saque = {id_usuario, id_cliente, valor_saque: valor,data_saque: dataFormatada}
 
     try {
@@ -49,8 +50,7 @@ class SaqueController {
       
       await SaqueDAO.registrarSaque(dados_saque);
 
-      next()
-
+res.redirect("/homeUsuario")
     } catch (err) {
       console.log(err);
     }

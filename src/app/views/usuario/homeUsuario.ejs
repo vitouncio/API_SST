@@ -123,13 +123,13 @@
     <div class="content">
         <div class="profile-info">
             <h2>Informações do Usuário</h2>
-            <p>Nome: <%= usuarioLogado.usuario.nome_usuario %></p>
-            <p>Email: <%= usuarioLogado.usuario.email_usuario %></p>
-            <p>Telefone: <%= usuarioLogado.usuario.telefone_usuario %></p>
+            <p><b>Nome:</b> <%= usuarioLogado.usuario.nome_usuario %></p>
+            <p><b>Email:</b> <%= usuarioLogado.usuario.email_usuario %></p>
+            <p><b>Telefone:</b> <%= usuarioLogado.usuario.telefone_usuario %></p>
         </div>
         <div class="main-content">
             <div class="buttons">
-                <button onclick="window.location.href='/telaSaque'">Saque</button>
+                <button onclick="window.location.href='/telaSaque'">Saques</button>
                 <button onclick="window.location.href='/telaDeposito'">Depósito</button>
                 <button onclick="window.location.href='/telaRecebimentoDeConta'">Contas</button>
                 <button onclick="window.location.href='/telaExtrato'">Extrato</button>
@@ -140,51 +140,5 @@
         </div>
     </div>
 </body>
-<script>
-    /*document.getElementById("btnAdicionarUsuario").addEventListener("click", function() {
-        // Capturar o email do usuário logado
-        var emailUsuarioLogado = '<%= usuarioLogado.usuario.email_usuario %>'; // Supondo que você já tenha esse valor disponível
-
-        // Criar um objeto com os dados a serem enviados
-        var dados = {
-            email_usuario: emailUsuarioLogado
-        };
-
-        // Enviar uma requisição POST para a rota '/addCliente' com os dados
-        fetch('/telaCadUsuario', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dados)
-        }).then(function(response) {
-            // Lidar com a resposta do servidor, se necessário
-        }).catch(function(error) {
-            console.error('Erro ao enviar requisição:', error);
-        });
-    });
-    document.getElementById("btnAdicionarCliente").addEventListener("click", function() {
-        // Capturar o email do usuário logado
-        var emailUsuarioLogado = '<%= usuarioLogado.usuario.email_usuario %>'; // Supondo que você já tenha esse valor disponível
-
-        // Criar um objeto com os dados a serem enviados
-        var dados = {
-            email_usuario: emailUsuarioLogado
-        };
-
-        // Enviar uma requisição POST para a rota '/addCliente' com os dados
-        fetch('/telaCadCliente', {
-            method: 'post',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dados)
-        }).then(function(response) {
-            // Lidar com a resposta do servidor, se necessário
-        }).catch(function(error) {
-            console.error('Erro ao enviar requisição:', error);
-        });
-    });*/
-</script>
 
 </html>

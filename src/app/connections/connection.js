@@ -1,6 +1,7 @@
 import mysql from 'mysql'
 import bodyParser from "body-parser";
 
+//criando a conexão com o banco de dados
 const conexao = mysql.createConnection({
     host: 'localhost',
     port: '3306',
@@ -17,6 +18,8 @@ const conexao = mysql.createConnection({
  * @returns objeto da Promisse
  */
 
+//função para fazer consultas no banco de dados
+//recebe como parâmetros o sql, os valores e a mensagem de erro
 export const consulta = (sql, valores='', mensagemReject) => {
   return new Promise((resolve, reject) => {
     conexao.query(sql, valores, (error, result) => {

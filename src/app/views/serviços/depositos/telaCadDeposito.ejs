@@ -5,275 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Depósitos</title>
   </head>
-  <body>
-    <div class="container">
-
-      <a href="/homeUsuario">
-        <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
-    </a>
-      <h2>Depósitos</h2>
-      <div class="tabs">
-        <button class="tab-button active" data-tab="cliente">Cliente</button>
-        <button class="tab-button" data-tab="avulso">Avulso</button>
-      </div>
-      <div class="tab-content active" id="cliente">
-        <form
-          id="depositoFormCliente"
-          action="/confirmacaoDeposito"
-          method="POST"
-        >
-          <div class="form-group">
-            <label for="buscarCliente">Buscar Cliente:</label>
-            <input
-              type="text"
-              name="id_cliente"
-              id="id_cliente"
-              placeholder="ID: --"
-              readonly
-            />
-            <input type="hidden" name="tipo_cliente" id="tipo_cliente" />
-            <br /><br />
-            <input type="text" name="nome_cliente" id="nome_cliente" readonly />
-            <br />
-            <br />
-            <button type="button" id="abrirModal">Buscar</button>
-          </div>
-          <div class="form-group">
-            <label for="agenciaCliente">Agência do Cliente:</label>
-            <input type="text" name="numero_agencia" id="agenciaCliente" />
-          </div>
-          <div class="form-group">
-            <label for="contaCliente">Conta Caixa do Cliente:</label>
-            <input type="text" name="numero_conta" id="contaCliente" />
-          </div>
-          <div class="form-group">
-            <label for="valorDepositoCliente">Valor a ser depositado:</label>
-            <input
-              type="number"
-              id="valorDepositoCliente"
-              name="valor_deposito"
-              step="0.01"
-              min="0"
-              placeholder="0.00"
-            />
-          </div>
-          <div class="form-group">
-            <label for="valorEntrada">Valor de entradaaaaaaa:</label>
-            <input
-              type="number"
-              id="valorEntradaCliente"
-              name="valor_entrada"
-              step="0.01"
-              min="0"
-              placeholder="0.00"
-            />
-          </div>
-          <div class="form-group">
-            <label for="tipoDepositoCliente">Tipo de Depósito:</label>
-            <select id="tipoDepositoCliente" name="tipo_pagamento">
-              <option value="Dinheiro">Dinheiro</option>
-              <option value="Pix">Pix</option>
-              <option value="Cheque">Cheque</option>
-            </select>
-            <br />
-            <br />
-          </div>
-          <input type="hidden" name="tipo_entrada" value="Depósito" />
-          <input type="hidden" name="troco" id="trocoCliente" />
-          <button type="submit">Depositar</button>
-        </form>
-      </div>
-      <div class="tab-content" id="avulso">
-        <form
-          id="depositoFormAvulso"
-          action="/confirmacaoDeposito"
-          method="POST"
-        >
-          <input type="hidden" name="id_cliente" value="-1" />
-          <input type="hidden" name="nome_cliente" value="Cliente Avulso" />
-          <div class="form-group">
-            <label for="agenciaAvulso">Agência do Cliente:</label>
-            <input type="text" name="numero_agencia" id="agenciaAvulso" />
-          </div>
-          <div class="form-group">
-            <label for="contaAvulso">Conta Caixa do Cliente:</label>
-            <input type="text" name="numero_conta" id="contaAvulso" />
-          </div>
-          <div class="form-group">
-            <label for="valorDepositoAvulso">Valor a ser depositado:</label>
-            <input
-              type="number"
-              name="valor_deposito"
-              id="valorDepositoAvulso"
-            />
-          </div>
-          <div class="form-group">
-            <label for="Entrada">Valor Entrada:</label>
-            <input 
-              type="number"
-              name="valor_entrada"
-              id="valorEntrada"
-            />
-          </div>
-          
-          <div class="form-group">
-            <label for="tipoDepositoCliente">Tipo de Depósito:</label>
-            <select id="tipoDepositoCliente" name="tipo_pagamento">
-              <option value="Dinheiro">Dinheiro</option>
-              <option value="Pix">Pix</option>
-              <option value="Cheque">Cheque</option>
-            </select>
-            <br />
-            <br />
-          </div>
-          <input type="hidden" name="tipo_entrada" value="Depósito" />
-          <input type="hidden" name="troco" id="trocoAvulso" />
-          <button type="submit">Depositar</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Modal de busca de clientes -->
-    <div id="modalClientes" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Selecione um Cliente</h2>
-        <table id="tabelaClientes">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Clientes serão inseridos aqui via JavaScript -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Adicionando biblioteca jQuery Mask Plugin -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        $("#contaCliente").mask("00000000-0");
-        $("#agenciaCliente").mask("0000");
-        $("#agenciaAvulso").mask("0000");
-        $("#contaAvulso").mask("00000000-0");
-      });
-
-      document.addEventListener("DOMContentLoaded", function () {
-        const btnAbrirModal = document.getElementById("abrirModal");
-        const tabelaClientesBody = document.querySelector(
-          "#tabelaClientes tbody"
-        );
-        const modalClientes = document.getElementById("modalClientes");
-        const spanClose = document.getElementsByClassName("close")[0];
-
-        btnAbrirModal.addEventListener("click", function () {
-          fetch("/buscarClientes") // URL do seu endpoint que retorna a lista de clientes
-            .then((response) => response.json())
-            .then((data) => {
-              tabelaClientesBody.innerHTML = "";
-              data.forEach((cliente) => {
-                const tr = document.createElement("tr");
-                tr.setAttribute("data-id", cliente.id_cliente);
-                tr.setAttribute("data-nome", cliente.nome_cliente);
-                tr.setAttribute("data-tipo", cliente.tipo_cliente);
-
-                const tdId = document.createElement("td");
-                tdId.textContent = cliente.id_cliente;
-
-                const tdTipo = document.createElement("td");
-                tdTipo.textContent = cliente.tipo_cliente;
-
-                const tdNome = document.createElement("td");
-                tdNome.textContent = cliente.nome_cliente;
-
-                const tdEmail = document.createElement("td");
-                tdEmail.textContent = cliente.email_cliente;
-
-                tr.appendChild(tdId);
-                tr.appendChild(tdTipo);
-                tr.appendChild(tdNome);
-                tr.appendChild(tdEmail);
-
-                tabelaClientesBody.appendChild(tr);
-              });
-              modalClientes.style.display = "block";
-            })
-            .catch((error) => console.error("Erro ao buscar clientes:", error));
-        });
-
-        spanClose.onclick = function () {
-          modalClientes.style.display = "none";
-        };
-
-        window.onclick = function (event) {
-          if (event.target == modalClientes) {
-            modalClientes.style.display = "none";
-          }
-        };
-
-        tabelaClientesBody.addEventListener("click", function (event) {
-          const target = event.target.closest("tr");
-          if (target) {
-            const clienteNome = target.getAttribute("data-nome");
-            const id_cliente = target.getAttribute("data-id");
-            const tipo_cliente = target.getAttribute("data-tipo");
-            document.getElementById("nome_cliente").value = clienteNome;
-            document.getElementById("id_cliente").value = id_cliente;
-            document.getElementById("tipo_cliente").value = tipo_cliente;
-            modalClientes.style.display = "none";
-          }
-        });
-      });
-
-      // Tab functionality
-      const tabs = document.querySelectorAll(".tab-button");
-      const contents = document.querySelectorAll(".tab-content");
-
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          tabs.forEach((item) => item.classList.remove("active"));
-          tab.classList.add("active");
-
-          contents.forEach((content) => content.classList.remove("active"));
-          document.getElementById(tab.dataset.tab).classList.add("active");
-        });
-      });
-
-      // Troco calculation
-      document
-        .getElementById("depositoFormCliente")
-        .addEventListener("submit", function (event) {
-          const valorDeposito = parseFloat(
-            document.getElementById("valorDepositoCliente").value
-          );
-          const valorEntrada = parseFloat(
-            document.getElementById("valorEntradaCliente").value
-          );
-          const troco = valorEntrada - valorDeposito;
-          document.getElementById("trocoCliente").value = troco.toFixed(2);
-        });
-
-      document
-        .getElementById("depositoFormAvulso")
-        .addEventListener("submit", function (event) {
-          const valorDeposito = parseFloat(
-            document.getElementById("valorDepositoAvulso").value
-          );
-          const valorEntrada = parseFloat(
-            document.getElementById("valorEntradaAvulso").value
-          );
-          const troco = valorEntrada - valorDeposito;
-          document.getElementById("trocoAvulso").value = troco.toFixed(2);
-        });
-    </script>
-  </body>
-</html>
-<style>
+  <style>
   body {
     font-family: "Arial", sans-serif;
     margin: 0;
@@ -285,7 +17,7 @@
     align-items: center;
   }
   .container {
-    width: 100%;
+    width: 30%;
     max-width: 1200px;
     margin-top: 20px;
     padding: 20px;
@@ -407,3 +139,319 @@
     background-color: #e9ecef;
   }
 </style>
+  <body>
+    <div class="container">
+
+      <a href="/homeUsuario">
+        <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
+      </a>
+      <h2>Depósitos</h2>
+      <div class="tabs">
+        <button class="tab-button active" data-tab="cliente">Cliente</button>
+        <button class="tab-button" data-tab="avulso">Avulso</button>
+      </div>
+      <div class="tab-content active" id="cliente">
+        <form
+          id="depositoFormCliente"
+          action="/confirmacaoDeposito"
+          method="POST"
+        >
+          <div class="form-group">
+            <label for="buscarCliente">Buscar Cliente:</label>
+            <input
+              type="text"
+              name="id_cliente"
+              id="id_cliente"
+              placeholder="ID: --"
+              readonly
+            />
+            <input type="hidden" name="tipo_cliente" id="tipo_cliente" />
+            <br /><br />
+            <input type="text" name="nome_cliente" id="nome_cliente" readonly />
+            <br />
+            <br />
+            <button type="button" id="abrirModal">Buscar</button>
+          </div>
+          <div class="form-group">
+            <label for="agenciaCliente">Agência do Cliente:</label>
+            <input type="text" name="numero_agencia" id="agenciaCliente" />
+          </div>
+          <div class="form-group">
+            <label for="contaCliente">Conta Caixa do Cliente:</label>
+            <input type="text" name="numero_conta" id="contaCliente" />
+          </div>
+          <div class="form-group">
+            <label for="valorDepositoCliente">Valor a ser depositado:</label>
+            <input
+              type="number"
+              id="valorDepositoCliente"
+              name="valor_deposito"
+              step="0.01"
+              min="0"
+              placeholder="0.00"
+            />
+          </div>
+          <div class="form-group">
+            <label for="valorEntrada">Valor de entradaaaaaaa:</label>
+            <input
+              type="number"
+              id="valorEntradaCliente"
+              name="valor_entrada"
+              step="0.01"
+              min="0"
+              placeholder="0.00"
+            />
+          </div>
+          <div class="form-group">
+            <label for="tipoDepositoCliente">Tipo de Depósito:</label>
+            <select id="tipoDepositoCliente" name="tipo_pagamento">
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Pix">Pix</option>
+              <option value="Cheque">Cheque</option>
+            </select>
+            <br />
+            <br />
+          </div>
+          <input type="hidden" name="tipo_entrada" value="Depósito" />
+          <input type="hidden" name="troco" id="trocoCliente" />
+          <button type="submit">Depositar</button>
+        </form>
+      </div>
+      <div class="tab-content" id="avulso">
+        <form
+          id="depositoFormAvulso"
+          action="/confirmacaoDeposito"
+          method="POST"
+        >
+          <input type="hidden" name="id_cliente" value="-1" />
+          <input type="hidden" name="nome_cliente" value="Cliente Avulso" />
+          <div class="form-group">
+            <label for="agenciaAvulso">Agência do Cliente:</label>
+            <input type="text" name="numero_agencia" id="agenciaAvulso" />
+          </div>
+          <div class="form-group">
+            <label for="contaAvulso">Conta Caixa do Cliente:</label>
+            <input type="text" name="numero_conta" id="contaAvulso" />
+          </div>
+          <div class="form-group">
+            <label for="valorDepositoAvulso">Valor a ser depositado:</label>
+            <input
+              type="number"
+              name="valor_deposito"
+              id="valorDepositoAvulso"
+            />
+          </div>
+          <div class="form-group">
+            <label for="Entrada">Valor Entrada:</label>
+            <input 
+              type="number"
+              name="valor_entrada"
+              id="valorEntrada"
+            />
+          </div>
+          <div class="form-group">
+            <label for="tipoDepositoCliente">Tipo de Depósito:</label>
+            <select id="tipoDepositoCliente" name="tipo_pagamento">
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Pix">Pix</option>
+              <option value="Cheque">Cheque</option>
+            </select>
+            <br />
+            <br />
+          </div>
+          <input type="hidden" name="tipo_entrada" value="Depósito" />
+          <input type="hidden" name="troco" id="trocoAvulso" />
+          <button type="submit">Depositar</button>
+        </form>
+      </div>
+
+      <!-- Filtro por data -->
+      <div class="form-group">
+        <label for="dataFiltro">Filtrar por Data:</label>
+        <input type="date" id="dataFiltro" />
+        <button id="filtrarData">Filtrar</button>
+      </div>
+
+      <div id="resultadosDepositos">
+        <!-- Aqui será inserida a lista de depósitos filtrados -->
+      </div>
+
+    </div>
+
+    <!-- Modal de busca de clientes -->
+    <div id="modalClientes" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Selecione um Cliente</h2>
+        <table id="tabelaClientes">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Clientes serão inseridos aqui via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Adicionando biblioteca jQuery Mask Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#contaCliente").mask("00000000-0");
+        $("#agenciaCliente").mask("0000");
+        $("#agenciaAvulso").mask("0000");
+        $("#contaAvulso").mask("00000000-0");
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const btnAbrirModal = document.getElementById("abrirModal");
+        const tabelaClientesBody = document.querySelector(
+          "#tabelaClientes tbody"
+        );
+        const modalClientes = document.getElementById("modalClientes");
+        const spanClose = document.getElementsByClassName("close")[0];
+
+        btnAbrirModal.addEventListener("click", function () {
+          fetch("/buscarClientes") // URL do seu endpoint que retorna a lista de clientes
+            .then((response) => response.json())
+            .then((data) => {
+              tabelaClientesBody.innerHTML = "";
+              data.forEach((cliente) => {
+                const tr = document.createElement("tr");
+                tr.setAttribute("data-id", cliente.id_cliente);
+                tr.setAttribute("data-nome", cliente.nome_cliente);
+                tr.setAttribute("data-tipo", cliente.tipo_cliente);
+
+                const tdId = document.createElement("td");
+                tdId.textContent = cliente.id_cliente;
+
+                const tdTipo = document.createElement("td");
+                tdTipo.textContent = cliente.tipo_cliente;
+
+                const tdNome = document.createElement("td");
+                tdNome.textContent = cliente.nome_cliente;
+
+                const tdEmail = document.createElement("td");
+                tdEmail.textContent = cliente.email_cliente;
+
+                tr.appendChild(tdId);
+                tr.appendChild(tdTipo);
+                tr.appendChild(tdNome);
+                tr.appendChild(tdEmail);
+
+                tabelaClientesBody.appendChild(tr);
+              });
+              modalClientes.style.display = "block";
+            })
+            .catch((error) => console.error("Erro ao buscar clientes:", error));
+        });
+
+        spanClose.onclick = function () {
+          modalClientes.style.display = "none";
+        };
+
+        window.onclick = function (event) {
+          if (event.target == modalClientes) {
+            modalClientes.style.display = "none";
+          }
+        };
+
+        tabelaClientesBody.addEventListener("click", function (event) {
+          const target = event.target.closest("tr");
+          if (target) {
+            const clienteNome = target.getAttribute("data-nome");
+            const id_cliente = target.getAttribute("data-id");
+            const tipo_cliente = target.getAttribute("data-tipo");
+            document.getElementById("nome_cliente").value = clienteNome;
+            document.getElementById("id_cliente").value = id_cliente;
+            document.getElementById("tipo_cliente").value = tipo_cliente;
+            modalClientes.style.display = "none";
+          }
+        });
+
+        // Simulação de dados de depósitos
+        const depositos = [
+          { id: 1, nome: "Cliente A", valor: 100.00, data: "2024-08-10" },
+          { id: 2, nome: "Cliente B", valor: 150.00, data: "2024-08-12" },
+          { id: 3, nome: "Cliente C", valor: 200.00, data: "2024-08-09" }
+        ];
+
+        function loadDepositos(filteredDepositos) {
+          const resultadosDepositos = document.getElementById(
+            "resultadosDepositos"
+          );
+          resultadosDepositos.innerHTML = "<h3>Lista de Depósitos</h3>";
+
+          if (filteredDepositos.length === 0) {
+            resultadosDepositos.innerHTML += "<p>Nenhum depósito encontrado.</p>";
+            return;
+          }
+
+          const table = document.createElement("table");
+          const thead = document.createElement("thead");
+          const tbody = document.createElement("tbody");
+
+          const headerRow = document.createElement("tr");
+          ["ID", "Nome", "Valor", "Data"].forEach((text) => {
+            const th = document.createElement("th");
+            th.textContent = text;
+            headerRow.appendChild(th);
+          });
+
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+
+          filteredDepositos.forEach((dep) => {
+            const tr = document.createElement("tr");
+
+            const tdId = document.createElement("td");
+            tdId.textContent = dep.id;
+
+            const tdNome = document.createElement("td");
+            tdNome.textContent = dep.nome;
+
+            const tdValor = document.createElement("td");
+            tdValor.textContent = dep.valor.toFixed(2);
+
+            const tdData = document.createElement("td");
+            tdData.textContent = dep.data;
+
+            tr.appendChild(tdId);
+            tr.appendChild(tdNome);
+            tr.appendChild(tdValor);
+            tr.appendChild(tdData);
+
+            tbody.appendChild(tr);
+          });
+
+          table.appendChild(tbody);
+          resultadosDepositos.appendChild(table);
+        }
+
+        loadDepositos(depositos);
+
+        document
+          .getElementById("filtrarData")
+          .addEventListener("click", function () {
+            const dataFiltro = document.getElementById("dataFiltro").value;
+            const filteredDepositos = depositos.filter(
+              (dep) => dep.data === dataFiltro
+            );
+            loadDepositos(filteredDepositos);
+          });
+
+        document
+          .getElementById("sortBtn")
+          .addEventListener("click", function () {
+            depositos.sort((a, b) => new Date(b.data) - new Date(a.data));
+            loadDepositos(depositos);
+          });
+      });
+    </script>
+  </body>
+</html>

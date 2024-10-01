@@ -22,6 +22,7 @@ class LoginController {
       usuarioLogado: req.session.usuario,
     });
   }
+  
 
   async login(req, res) {
     const email = req.body.email;

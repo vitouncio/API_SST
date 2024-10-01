@@ -53,7 +53,6 @@ class ClienteController {
 
   async telaEditarCliente(req, res) {
     const idCliente = req.params.id;
-
     try {
       const cliente = await ClienteDAO.findByIdWithEndereco(idCliente);
       res.render("cliente/telaEditarCliente", { cliente });

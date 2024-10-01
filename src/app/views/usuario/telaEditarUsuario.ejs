@@ -103,6 +103,27 @@
         .popup button:hover {
             background-color: #0056b3;
         }
+        .btn-back {
+        position: absolute;
+        top: 90px;
+        left: 20px;
+        background-color: #f44336; /* Cor de fundo vermelha */
+        color: white;
+        border: none;
+        border-radius: 50%; /* Deixa o botão redondo */
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-back:hover {
+        background-color: #d32f2f; /* Cor de fundo vermelha mais escura ao passar o mouse */
+      }
     </style>
 </head>
 <body>
@@ -112,9 +133,16 @@
         </a>
         <h1>Editar Usuário</h1>
     </div>
-    
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  />
+  <button class="btn-back" onclick="window.location.href='/homeUsuario'">
+    <i class="fas fa-arrow-left"></i>
+  </button>
     <div class="container">
         <h2>Atualize os dados abaixo</h2>
+        
         <form id="editUsuarioForm" method="POST">
             <div class="form-group">
                 <label for="tipo_usuario">Tipo:</label>
@@ -132,14 +160,16 @@
                 <input type="email" id="email_usuario" name="email_usuario" value="<%= usuario.email_usuario %>" required>
             </div>
             
-            <div class="form-group">
-                <label for="senha_usuario">Nova senha:</label>
-                <input type="password" id="senha_usuario" name="senha_usuario" required>
-            </div>
-            <div class="form-group">
-                <label for="confirmar_senha">Confirmar Nova Senha:</label>
-                <input type="password" id="confirmar_senha" name="confirmar_senha" required>
-            </div>
+            <% if (isEditando) { %>
+                <div class="form-group">
+                    <label for="senha_usuario">Senha:</label>
+                    <input type="password" id="senha_usuario" name="senha_usuario">
+                </div>
+                <div class="form-group">
+                    <label for="confirmar_senha">Confirmar Senha:</label>
+                    <input type="password" id="confirmar_senha" name="confirmar_senha">
+                </div>
+                <% } %>
             <div class="form-group">
                 <label for="telefone_usuario">Telefone:</label>
                 <input type="text" id="telefone_usuario" name="telefone_usuario" value="<%= usuario.telefone_usuario %>" required>

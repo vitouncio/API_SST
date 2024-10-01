@@ -19,8 +19,9 @@ class UsuarioController {
   }
 
   async telaCadastroUsuario(req, res) {
+    const isEditando = true
     try {
-      res.render("usuario/cadastroUsuario");
+      res.render("usuario/cadastroUsuario", {isEditando});
     } catch (err) {
       console.log(err);
     }
@@ -29,9 +30,10 @@ class UsuarioController {
   async telaEditarUsuario(req, res) {
     try {
       const usuario_id = req.params.id;
+      const isEditando = false
 
       const usuario = await UsuarioDAO.findById(usuario_id);
-      res.render("usuario/telaEditarUsuario", { usuario });
+      res.render("usuario/telaEditarUsuario", { usuario,isEditando });
     } catch (err) {
       console.log(err);
     }

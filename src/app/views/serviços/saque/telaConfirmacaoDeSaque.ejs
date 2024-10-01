@@ -1,92 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confirmação de Saque</title>
-  <style>
-    body {
-      font-family: "Arial", sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .container {
-      width: 100%;
-      max-width: 600px;
-      margin-top: 20px;
-      padding: 20px;
-      background-color: #fff;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      text-align: center;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-group label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .form-group input {
-      width: 100%;
-      padding: 8px;
-      box-sizing: border-box;
-      border: none;
-      background-color: #f4f4f4;
-      text-align: center;
-    }
-    button[type="submit"] {
-      background-color: #15db03;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background-color 0.3s;
-    }
-    button[type="submit"]:hover {
-      background-color: #13a106;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <a href="/homeUsuario">
-      <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
-  </a>
-    <h2>Confirmação de Saque</h2>
-    <form id="confirmacaoSaqueForm" action="/confirmarSaque" method="POST">
-      <div class="form-group">
-        <label for="Cliente">Cliente:</label>
-        <input type="text" id="nomeCliente" name="nome_cliente" readonly value="ID: <%= dados_saque.id_cliente %> | <%= dados_saque.nome_cliente %>"/>
-        <input type="hidden" name="id_cliente" readonly value="<%= dados_saque.id_cliente %>"/>
-      </div>
-      <div class="form-group">
-        <label for="agenciaCliente">Agência do Cliente:</label>
-        <input type="text" id="agenciaCliente" name="numero_agencia" readonly value="<%= dados_saque.numero_agencia %>"/>
-      </div>
-      <div class="form-group">
-        <label for="contaCliente">Conta Caixa do Cliente:</label>
-        <input type="text" id="contaCliente" name="numero_conta" readonly value="<%= dados_saque.numero_conta %>"/>
-      </div>
-      <div class="form-group">
-        <label for="valorSaque">Valor a ser Sacado:</label>
-        <input type="text" id="valorSaque" name="valor" readonly value="<%= dados_saque.valor_saque %>"/>
-      </div>
-      <div class="form-group">
-        <label for="tipoSaque">Tipo de Saque:</label>
-        <input type="text" id="tipoSaque" name="tipo_pagamento" readonly value="Apenas Dinheiro"/>
-      </div>
-      <input type="hidden" id="tipo_saida" name="tipo" value="Saque"/>
-      <button type="submit">Confirmar</button>
-    </form>
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirmação de Saque</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .container {
+        width: 100%;
+        max-width: 600px;
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        border: none;
+        background-color: #f4f4f4;
+        text-align: center;
+      }
+      button[type="submit"] {
+        background-color: #15db03;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+      }
+      button[type="submit"]:hover {
+        background-color: #13a106;
+      }
+      .btn-back {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: #f44336; /* Cor de fundo vermelha */
+        color: white;
+        border: none;
+        border-radius: 50%; /* Deixa o botão redondo */
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-back:hover {
+        background-color: #d32f2f; /* Cor de fundo vermelha mais escura ao passar o mouse */
+      }
+    </style>
+  </head>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  />
+
+  <body>
+    <button class="btn-back" onclick="window.location.href='/telaCadSaque'">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <div class="container">
+      <a href="/homeUsuario">
+        <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon" />
+      </a>
+      <h2>Confirmação de Saque</h2>
+      <form id="confirmacaoSaqueForm" action="/confirmarSaque" method="POST">
+        <div class="form-group">
+          <label for="Cliente">Cliente:</label>
+          <input
+            type="text"
+            id="nomeCliente"
+            name="nome_cliente"
+            readonly
+            value="ID: <%= dados_saque.id_cliente %> | <%= dados_saque.nome_cliente %>"
+          />
+          <input
+            type="hidden"
+            name="id_cliente"
+            readonly
+            value="<%= dados_saque.id_cliente %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="agenciaCliente">Agência do Cliente:</label>
+          <input
+            type="text"
+            id="agenciaCliente"
+            name="numero_agencia"
+            readonly
+            value="<%= dados_saque.numero_agencia %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="contaCliente">Conta Caixa do Cliente:</label>
+          <input
+            type="text"
+            id="contaCliente"
+            name="numero_conta"
+            readonly
+            value="<%= dados_saque.numero_conta %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="valorSaque">Valor a ser Sacado:</label>
+          <input
+            type="text"
+            id="valorSaque"
+            name="valor"
+            readonly
+            value="<%= dados_saque.valor_saque %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="tipoSaque">Tipo de Saque:</label>
+          <input
+            type="text"
+            id="tipoSaque"
+            name="tipo_pagamento"
+            readonly
+            value="Apenas Dinheiro"
+          />
+        </div>
+        <input type="hidden" id="tipo_saida" name="tipo" value="Saque" />
+        <button type="submit">Confirmar</button>
+      </form>
+    </div>
+  </body>
 </html>
