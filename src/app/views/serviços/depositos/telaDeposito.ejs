@@ -274,6 +274,7 @@
 
             // Eventos
             $('#btnCadastrarDeposito').on('click', function() {
+<<<<<<< HEAD
                 window.location.href = '/telaCadDeposito';
             });
 
@@ -289,6 +290,23 @@
                 window.location.href = `/perfilCliente/${id}`;
             });
 
+=======
+                window.location.href = '/cadastrarDeposito';
+            });
+
+            $(document).on('click', '.detalhes-btn', function() {
+                const id = $(this).data('id');
+                mostrarModal(id);
+            });
+
+            $('#fecharModal').on('click', fecharModal);
+
+            $('#btnIrParaPerfil').on('click', function() {
+                const id = $('#id_deposito').text();
+                window.location.href = `/perfilCliente/${id}`;
+            });
+
+>>>>>>> 54b7e9c7961ebcbd3c070b4636c181f08bd67e7c
             // Carregar histórico ao iniciar a página
             buscarHistoricoDepositos();
         });
@@ -297,3 +315,7 @@
 </html>
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 54b7e9c7961ebcbd3c070b4636c181f08bd67e7c

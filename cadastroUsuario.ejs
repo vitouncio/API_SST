@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuário</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #01b30a;
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .header button {
+            background-color: #fff;
+            color: #dd9611;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .header button:hover {
+            background-color: #e7e7e7;
+        }
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .container h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #12923d;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-group input[type="submit"] {
+            background-color: #049911;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #1dbe25;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .popup.show {
+            display: block;
+        }
+        .popup button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .popup button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/homeUsuario">
+            <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
+        </a>
+        <h1>Editar Usuário</h1>
+    </div>
+    
+    <div class="container">
+        <h2>Atualize os dados abaixo</h2>
+        <form id="editUsuarioForm" method="POST">
+            <div class="form-group">
+                <label for="tipo_usuario">Tipo:</label>
+                <select id="tipo_usuario" name="tipo_usuario" required>
+                    <option value="FUNC" <%= usuario.tipo_usuario === 'FUNC' ? 'selected' : '' %>>Funcionário</option>
+                    <option value="ADMIN" <%= usuario.tipo_usuario === 'ADMIN' ? 'selected' : '' %>>Administrador</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nome_usuario">Nome:</label>
+                <input type="text" id="nome_usuario" name="nome_usuario" value="<%= usuario.nome_usuario %>" required>
+            </div>
+            <div class="form-group">
+                <label for="email_usuario">Email:</label>
+                <input type="email" id="email_usuario" name="email_usuario" value="<%= usuario.email_usuario %>" required>
+            </div>
+
+            <% if (isEditando) { %>
+            <div class="form-group">
+                <label for="senha_usuario">Senha:</label>
+                <input type="password" id="senha_usuario" name="senha_usuario">
+            </div>
+            <div class="form-group">
+                <label for="confirmar_senha">Confirmar Senha:</label>
+                <input type="password" id="confirmar_senha" name="confirmar_senha">
+            </div>
+            <% } %>
+
+            <div class="form-group">
+                <label for="telefone_usuario">Telefone:</label>
+                <input type="text" id="telefone_usuario" name="telefone_usuario" value="<%= usuario.telefone_usuario %>" required>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Atualizar">
+                <button type="button" onclick="confirmCancel()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="popup" class="popup">
+        <p>Usuário atualizado com sucesso!</p>
+        <button onclick="window.location.href='/homeUsuario'">Home</button>
+        <button onclick="window.location.href='/telaBuscarUsuarios'">Ver usuários</button>
+    </div>
+
+    <!-- Adicionando biblioteca jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Adicionando biblioteca jQuery Mask Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#telefone_usuario').mask('(00) 00000-0000');
+        });
+
+        console.log('<%= usuario.id_usuario %>')
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('editUsuarioForm');
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Evita o comportamento padrão do formulário
+
+                if (!confirm("Você tem certeza que deseja salvar as alterações?")) {
+                    return;
+                }
+
+                const usuarioId = '<%= usuario.id_usuario %>';
+                const formData = new FormData(form);
+                const jsonData = {};
+                formData.forEach((value, key) => jsonData[key] = value);
+
+                try {
+                    const response = await fetch(`/atualizarUsuario/${usuarioId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(jsonData)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Erro ao atualizar usuário');
+                    }
+                    
+                    document.getElementById('popup').classList.add('show');
+                    window.location.href = "/telaBuscarUsuarios"; // Redirecionar para a página de busca de clientes
+                } catch (error) {
+                    console.error('Erro ao atualizar usuário:', error);
+                    alert('Ocorreu um erro ao atualizar o usuário. Por favor, tente novamente.');
+                }
+            });
+        });
+
+        function confirmCancel() {
+            if (confirm("Você tem certeza que deseja cancelar as alterações?")) {
+                window.location.href = "/telaBuscarClientes";
+            }
+        }
+    </script>
+</body>
+</html>

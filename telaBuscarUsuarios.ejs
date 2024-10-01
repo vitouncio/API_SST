@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Usuários</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .container {
+        width: 80%;
+        margin-top: 50px;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ddd;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      .actions {
+        text-align: center;
+      }
+      .actions i {
+        cursor: pointer;
+        margin: 0 5px;
+      }
+      .edit {
+        color: #4caf50;
+      }
+      .delete {
+        color: #f44336;
+      }
+      .profile {
+        color: #007bff;
+      }
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+      }
+      .btn:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/homeUsuario">
+      <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
+  </a>
+    <div class="container">
+      <h1>Usuarios</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (usuarios.length > 0) { %> <% usuarios.forEach(usuario => { %>
+          <tr id="client-row-<%= usuario.id_usuario %>">
+            <td><%= usuario.tipo_usuario %></td>
+            <td><%= usuario.nome_usuario %></td>
+            <td><%= usuario.email_usuario %></td>
+            <td><%= usuario.telefone_usuario %></td>
+            <td class="actions">
+              <i
+                class="fas fa-edit edit"
+                onclick="editarusuario('<%= usuario.id_usuario %>')"
+              ></i>
+              <i
+                class="fas fa-trash delete"
+                onclick="confirmDelete('<%= usuario.id_usuario %>')"
+              ></i>
+              
+            </td>
+          </tr>
+          <% }) %> <% } else { %>
+          <tr>
+            <td colspan="5" style="text-align: center">
+              Nenhum usuario encontrado
+            </td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <button onclick="window.location.href='/telaCadusuario'">
+        Adicionar usuario
+      </button>
+    </div>
+
+    <script>
+      function editarusuario(id) {
+        // Redirecionar para a página de edição do usuario
+        window.location.href = `/telaEditarUsuario/${id}`;
+      }
+
+      function confirmDelete(id) {
+        if (confirm("Você tem certeza que deseja remover este usuario?")) {
+            fetch(`/deletarUsuario/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error('Error:', data.error);
+        } else {
+            console.log('Success:', data.message);
+            // Remover a linha da tabela
+            const row = document.getElementById(`client-row-${id}`);
+            if (row) {
+                row.remove();
+            }
+            window.reload()
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });        }
+      }
+
+
+
+
+      function perfilusuario(id) {
+        // Redirecionar para a página de perfil do usuario
+        window.location.href = `/perfilUsuario/${id}`;
+      }
+    </script>
+  </body>
+</html>
