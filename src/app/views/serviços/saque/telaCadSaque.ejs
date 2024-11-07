@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,8 +16,9 @@
       flex-direction: column;
       align-items: center;
     }
+
     .container {
-      width: 100%;
+      width: 40%;
       max-width: 1200px;
       margin-top: 20px;
       padding: 20px;
@@ -24,11 +26,13 @@
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
     }
+
     .tabs {
       display: flex;
       justify-content: space-between;
       margin-bottom: 20px;
     }
+
     .tab-button {
       background-color: #5df76a;
       color: #fff;
@@ -39,31 +43,39 @@
       font-size: 14px;
       transition: background-color 0.3s;
     }
+
     .tab-button.active {
       background-color: #13a106;
     }
+
     .tab-button:hover {
       background-color: #13a106;
     }
+
     .tab-content {
       display: none;
     }
+
     .tab-content.active {
       display: block;
     }
+
     .form-group {
       margin-bottom: 20px;
     }
+
     .form-group label {
       display: block;
       margin-bottom: 5px;
     }
+
     .form-group input,
     .form-group select {
       width: 100%;
       padding: 8px;
       box-sizing: border-box;
     }
+
     button[type="submit"] {
       background-color: #15db03;
       color: #fff;
@@ -74,9 +86,11 @@
       font-size: 14px;
       transition: background-color 0.3s;
     }
+
     button[type="submit"]:hover {
       background-color: #13a106;
     }
+
     /* Modal */
     .modal {
       display: none;
@@ -91,6 +105,7 @@
       background-color: rgba(0, 0, 0, 0.4);
       padding-top: 60px;
     }
+
     .modal-content {
       background-color: #fefefe;
       margin: 5% auto;
@@ -100,76 +115,59 @@
       max-width: 600px;
       border-radius: 8px;
     }
+
     .close {
       color: #aaa;
       float: right;
       font-size: 28px;
       font-weight: bold;
     }
+
     .close:hover,
     .close:focus {
       color: black;
       text-decoration: none;
       cursor: pointer;
     }
+
     #tabelaClientes {
       width: 100%;
       border-collapse: collapse;
       margin-top: 20px;
     }
+
     #tabelaClientes,
     #tabelaClientes th,
     #tabelaClientes td {
       border: 1px solid #ddd;
     }
+
     #tabelaClientes th,
     #tabelaClientes td {
       padding: 12px;
       text-align: left;
     }
+
     #tabelaClientes th {
       background-color: #08e401;
       color: #fff;
     }
+
     #tabelaClientes tr:nth-child(even) {
       background-color: #f2f2f2;
     }
+
     #tabelaClientes tr:hover {
       background-color: #e9ecef;
     }
-    .btn-back {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background-color: #f44336; /* Cor de fundo vermelha */
-  color: white;
-  border: none;
-  border-radius: 50%; /* Deixa o botão redondo */
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.btn-back:hover {
-  background-color: #d32f2f; /* Cor de fundo vermelha mais escura ao passar o mouse */
-}
   </style>
 </head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 <body>
-  <button class="btn-back" onclick="window.location.href='/telaSaque'">
-    <i class="fas fa-arrow-left"></i>
-  </button>
   <div class="container">
     <a href="/homeUsuario">
       <img src="imagens/logo_sollo.png" alt="Logo" class="home-icon">
-  </a>
-  
+    </a>
     <h2>Saque</h2>
     <div class="tabs">
       <button class="tab-button active" data-tab="cliente">Cliente</button>
@@ -188,16 +186,16 @@
         </div>
         <div class="form-group">
           <label for="agenciaCliente">Agência do Cliente:</label>
-          <input type="text" name="numero_agencia" id="agenciaCliente" />
+          <input type="text" name="numero_agencia" id="agenciaCliente" required/>
         </div>
         <div class="form-group">
           <label for="contaCliente">Conta Caixa do Cliente:</label>
-          <input type="text" name="numero_conta" id="contaCliente" />
+          <input type="text" name="numero_conta" id="contaCliente" required/>
         </div>
         <div class="form-group">
           <label for="valorSaqueCliente">Valor:</label>
           <input type="text" id="valorSaqueCliente" name="valor_saque" step="0.01" min="0" placeholder="R$ 0,00"
-          class="currency" required/>
+            class="currency" required/>
         </div>
         <button type="submit">Sacar</button>
       </form>
@@ -208,16 +206,17 @@
         <input type="hidden" name="nome_cliente" value="Cliente Avulso" />
         <div class="form-group">
           <label for="agenciaAvulso">Agência do Cliente:</label>
-          <input type="text" name="numero_agencia" id="agenciaAvulso" />
+          <input type="text" name="numero_agencia" id="agenciaAvulso" required/>
         </div>
         <div class="form-group">
           <label for="contaAvulso">Conta Caixa do Cliente:</label>
-          <input type="text" name="numero_conta" id="contaAvulso" />
+          <input type="text" name="numero_conta" id="contaAvulso" required/>
         </div>
         <div class="form-group">
           <label for="valorSaqueAvulso">Valor do saque:</label>
-          <input type="text" id="valorSaqueCliente" name="valor_saque" step="0.01" min="0" placeholder="R$ 0,00" required>        </div>
-        
+          <input type="text" id="valorSaqueCliente" name="valor_saque" step="0.01" min="0" placeholder="R$ 0,00" required>
+        </div>
+
         <button type="submit">Sacar</button>
       </form>
     </div>
@@ -248,24 +247,31 @@
   <!-- Adicionando biblioteca jQuery Mask Plugin -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
   <script>
+
     $(document).ready(function () {
       $("#contaCliente").mask("00000000-0");
       $("#agenciaCliente").mask("0000");
       $("#agenciaAvulso").mask("0000");
       $("#contaAvulso").mask("00000000-0");
+
       $('.currency').mask('R$ 00.000,00', { reverse: true });
+
       // Adicionando "R$" ao sair do foco nos campos de valor
       $('#valorSaqueCliente').on('focusout', function () {
         if (!$(this).val().startsWith('R$ ')) {
+
         $(this).val('R$ ' + $(this).val());
+
         //var tmpStr = $(this).val();
         //$(this).val('');
        // $(this).val(tmpStr);
         }else{
           $(this).val('R$ 0,00');
+
         }
       });
     });
+
     document.addEventListener("DOMContentLoaded", function () {
       const btnAbrirModal = document.getElementById("abrirModal");
       const tabelaClientesBody = document.querySelector("#tabelaClientes tbody");
@@ -330,4 +336,5 @@
     });
   </script>
 </body>
+
 </html>

@@ -1,22 +1,31 @@
 import { consulta } from "../connections/connection.js";
 
 class ContaDAO {
-  async create(conta) {
+  
+  async createConta(conta) {
     const sql = "INSERT INTO tbl_contas SET ?;";
     try {
-      const result = await consulta(
-        sql,
-        conta,
-        "Não foi possível cadastrar o novo conta"
-      );
+      const result = await consulta(sql, conta, "Não foi possível registrar o pagamento");
       return result;
     } catch (err) {
       console.log(err);
+      throw err;
+    }
+  }
+  
+  async createPagamento(pagamento) {
+    const sql = "INSERT INTO tbl_pagamentos SET ?;";
+    try {
+      const result = await consulta(sql, pagamento, "Não foi possível criar o pagamento");
+      return result;
+    } catch (err) {
+      console.log(err);
+      throw err;
     }
   }
 
   async findById(id) {
-    const sql = "SELECT * FROM tbl_contas WHERE id_conta=?;";
+    const sql = "SELECT * FROM tbl_titulos WHERE id_conta=?;";
     const result = await consulta(
       sql,
       id,
@@ -36,7 +45,7 @@ class ContaDAO {
     f.nome_funcionario,
     e.nome_cliente
 FROM 
-    tbl_contas m
+    tbl_titulos m
 JOIN 
     tbl_funcionarios f ON m.id_funcionario = f.id_funcionario
 JOIN 
@@ -58,18 +67,7 @@ WHERE
     }
   }
 
-  async receberConta(conta) {
-    const sql = "INSERT INTO tbl_recebimento_conta SET ?;";
-    try {
-      const result = await consulta(
-        sql,
-        conta,
-        "Não foi possível registar o recebimento do novo conta"
-      );
-    } catch (err) {
-      console.log(err);
-    }
-  }
+ 
 
   async findAllContasByIdCliente(id) {
     const sql = `

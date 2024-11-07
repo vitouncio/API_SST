@@ -70,7 +70,7 @@ router.post(
   router.get('/malotesPendentes', MaloteController.getMalotesPendentes);
   router.get('/malotesProcessados', MaloteController.getMalotesProcessados);
   router.get('/malotesDevolvidos', MaloteController.getMalotesDevolvidos);
-  router.post("/processarMalote/:id", ContaController.cadastrarContas, MaloteController.processarMalote )
+  router.post("/processarMalote/:id", ContaController.registrarPagamento, MaloteController.processarMalote )
   
 //DEPOSITOS
 router.get("/telaDeposito", DepositoController.telaDeposito)
@@ -93,7 +93,7 @@ router.get("/buscarOrigemTransacaoTroco/:id", TransacaoController.buscarTransaca
 
 //CONTAS
 router.get("/telaRecebimentoDeConta", ContaController.telaRecebimentoDeConta)
-router.post("/cadastrarContas", ContaController.cadastrarContas)
+router.post("/registrarPagamentos", ContaController.registrarPagamento)
 //SAQUE
 router.get("/telaSaque", SaqueController.telaSaque)
 router.get("/telaCadSaque", SaqueController.telaCadSaque)

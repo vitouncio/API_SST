@@ -46,13 +46,40 @@ class ContaController {
     }
   }
 
-  async cadastrarContas(req, res) {
-    const dados = req.body;
+  async registrarPagamento(req, res) {
+    const { contas, id_cliente, observacao } = req.body;
+    const id_usuario = req.session.usuario.usuario.id_usuario;
+
+    //registrando local exato do pagamento
+    const data = new Date();
+    const data_pagamento = format(data, "dd/MM/yyyy HH:mm:ss");
+
+    const resultPagamento = await ContaDAO.createPagamento({data_pagamento});
+      const id_pagamento = resultPagamento.insertId;
+
+
     try {
-      console.log(dados);
-      
+      for (const conta of contas) {
+        const novaConta = {
+          afk_id_pagamento: id_pagamento,
+          banco: conta.banco,
+          segmento: conta.segmento,
+          valor: conta.valor,
+          codigo: conta.codigo,
+          data_vencimento: conta.data_vencimento,
+          observacao: observacao,
+          id_cliente: id_cliente,
+          id_usuario: id_usuario // Adicionar o ID do usuário logado
+        };
+        console.log(novaConta);
+        
+        // Salvar o conta no banco de dados
+        await ContaDAO.createConta(novaConta);
+      }
+  
+      res.status(200).json({ success: true });
     } catch (error) {
-      res.status(500).json({ message: "Erro ao registrar pagamentos", error });
+      res.status(500).json({ message: "Erro ao registrar contas", error });
       console.log(error)
     }
   }
