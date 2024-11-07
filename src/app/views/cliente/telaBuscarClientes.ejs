@@ -163,33 +163,32 @@
       }
 
       function confirmDelete(id) {
-        if (confirm("Você tem certeza que deseja remover este usuario?")) {
-          fetch(`/deletarUsuario/${id}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.error) {
-                console.error("Error:", data.error);
-              } else {
-                console.log("Success:", data.message);
-                // Remover a linha da tabela
-                const row = document.getElementById(`client-row-${id}`);
-                if (row) {
-                  row.remove();
-                }
-                window.reload();
-              }
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
+    if (confirm("Você tem certeza que deseja remover este cliente?")) {
+      fetch(`/deletarCliente/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
         }
-      }
-
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          console.error('Erro:', data.error);
+        } else {
+          console.log('Sucesso:', data.message);
+          // Remover a linha da tabela
+          const row = document.getElementById(`cliente-row-${id}`);
+          if (row) {
+            row.remove();
+          }
+          window.location.reload();
+        }
+      })
+      .catch((error) => {
+        console.error('Erro:', error);
+      });
+    }
+  }
       function perfilCliente(id) {
         // Redirecionar para a página de perfil do cliente
         window.location.href = `/perfilCliente/${id}`;

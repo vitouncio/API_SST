@@ -13,7 +13,7 @@ class ClienteController {
 
   async telaPerfilCliente(req, res) {
     try {
-      console.log(req.params.id)
+      console.log(req.params.id);
       const cliente = await ClienteDAO.findById(req.params.id);
 
       if (cliente.tipo_cliente === "PJ") {
@@ -121,7 +121,7 @@ class ClienteController {
         );
       }
 
-      res.status(200).json({ message: 'Deu bom' });
+      res.status(200).json({ message: "Deu bom" });
     } catch (err) {
       console.error(err);
     }
@@ -137,12 +137,12 @@ class ClienteController {
     }
   }
 
-  async buscarClientes(req,res){
-    try{
-      const listaClientes = await ClienteDAO.findAll()
-      res.json(listaClientes) 
-    }catch(err){
-      console.log(err)
+  async buscarClientes(req, res) {
+    try {
+      const listaClientes = await ClienteDAO.findAll();
+      res.json(listaClientes);
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -217,39 +217,40 @@ class ClienteController {
   }
 
   async deletarCliente(req, res) {
-    const idCliente = req.params.id;
-    console.log(idCliente);
-    const cliente = await ClienteDAO.findById(idCliente);
-    if (!cliente) {
-      console.log(`Cliente with ID: ${idCliente} not found.`);
-      return res.status(404).json({ error: "Cliente not found" });
-    }
+    try {
+      const idCliente = req.params.id;
+      console.log(idCliente);
+      const cliente = await ClienteDAO.findById(idCliente);
+      if (!cliente) {
+        console.log(`Cliente with ID: ${idCliente} not found.`);
+        return res.status(404).json({ error: "Cliente not found" });
+      }
 
-    console.log(`Cliente found: ${JSON.stringify(cliente)}`);
+      console.log(`Cliente found: ${JSON.stringify(cliente)}`);
 
-    const isClienteDeletado = await ClienteDAO.delete(idCliente);
-    if (isClienteDeletado.affectedRows > 0) {
-      console.log(`Cliente with ID: ${idCliente} was successfully deleted.`);
-      const data = new Date();
-      const dataFormatada = format(data, "dd/MM/yyyy HH:mm:ss");
-      cliente.data_remocao = data;
-      delete cliente.tipo_cliente;
-      await ClienteDAO.registrarClienteDeletado(cliente);
-      console.log("Cliente deletado registered in tbl_cliente_deletado.");
-      return res.json({
-        message: "Cliente deleted and registered successfully",
-      });
-      res.refresh();
-    } else {
-      console.log(`Cliente with ID: ${idCliente} not found.`);
-      return res.status(404).json({ error: "Cliente not found" });
+      const isClienteDeletado = await ClienteDAO.delete(idCliente);
+      if (isClienteDeletado.affectedRows > 0) {
+        console.log(`Cliente with ID: ${idCliente} was successfully deleted.`);
+        const data = new Date();
+        const dataFormatada = format(data, "dd/MM/yyyy HH:mm:ss");
+        cliente.data_remocao = data;
+        delete cliente.tipo_cliente;
+        await ClienteDAO.registrarClienteDeletado(cliente);
+        console.log("Cliente deletado registered in tbl_cliente_deletado.");
+        return res.json({
+          message: "Cliente deleted and registered successfully",
+        });
+        res.refresh();
+      } else {
+        console.log(`Cliente with ID: ${idCliente} not found.`);
+        return res.status(404).json({ error: "Cliente not found" });
+      }
+    } catch (error) {
+      console.error(`Error while deleting cliente: ${error.message}`);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while deleting the cliente" });
     }
-  }
-  catch(error) {
-    console.error(`Error while deleting cliente: ${error.message}`);
-    return res
-      .status(500)
-      .json({ error: "An error occurred while deleting the cliente" });
   }
 }
 
