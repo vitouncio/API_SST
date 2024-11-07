@@ -1,6 +1,10 @@
 import mysql from 'mysql'
 import bodyParser from "body-parser";
 
+//COMANDO PARA ARBIR A PORTA NO FIREWALL  
+//netsh advfirewall firewall add rule name="Server_sollo" dir=in action=allow protocol=TCP localport=3000
+
+
 //criando a conexão com o banco de dados
 const conexao = mysql.createConnection({
     host: 'localhost',
